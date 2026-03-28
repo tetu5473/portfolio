@@ -1,0 +1,259 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: calc(100vh - 60px - 56px);
+}
+
+.apiWarning {
+  background: #FEF3C7;
+  border: 1px solid #FCD34D;
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #92400E;
+  line-height: 1.6;
+}
+
+.apiWarning code {
+  background: #FDE68A;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+.chatArea {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  color: #94A3B8;
+  text-align: center;
+  padding: 40px;
+}
+
+.welcomeIcon {
+  font-size: 48px;
+}
+
+.welcomeTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.welcomeDesc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #94A3B8;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 85%;
+}
+
+.message.user {
+  align-self: flex-end;
+}
+
+.message.assistant {
+  align-self: flex-start;
+}
+
+.messageRole {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94A3B8;
+}
+
+.messageContent {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message.user .messageContent {
+  background: #2563EB;
+  color: #fff;
+  border-radius: 10px 10px 2px 10px;
+}
+
+.message.assistant .messageContent {
+  background: #F1F5F9;
+  color: #1E293B;
+  border-radius: 10px 10px 10px 2px;
+}
+
+.typing {
+  display: flex;
+  gap: 5px;
+  padding: 14px 18px;
+  background: #F1F5F9;
+  border-radius: 10px 10px 10px 2px;
+}
+
+.typing span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #94A3B8;
+  animation: bounce 1.2s infinite;
+}
+
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+
+.inputArea {
+  padding: 16px 20px;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.queryInput {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  color: #1E293B;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.queryInput:focus {
+  outline: none;
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.queryInput:disabled {
+  background: #F8FAFC;
+}
+
+.inputActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btnSend {
+  background: #2563EB;
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnSend:hover:not(:disabled) {
+  background: #1D4ED8;
+}
+
+.btnSend:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnClear {
+  background: #fff;
+  color: #64748B;
+  border: 1px solid #E2E8F0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnClear:hover:not(:disabled) {
+  background: #F8FAFC;
+}
+
+.sidebar {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.sideTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  margin: 0;
+}
+
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.suggestionBtn {
+  text-align: left;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #334155;
+  cursor: pointer;
+  line-height: 1.5;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.suggestionBtn:hover {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #2563EB;
+}

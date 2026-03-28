@@ -1,0 +1,162 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.statCard {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px 24px;
+  border-top: 4px solid #2563EB;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+}
+
+.statValue {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.statUnit {
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 2px;
+}
+
+.statLabel {
+  font-size: 13px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
+  align-items: start;
+}
+
+.sideCards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+}
+
+.cardTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0 0 16px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th {
+  text-align: left;
+  padding: 8px 12px;
+  background: #F8FAFC;
+  color: #64748B;
+  font-weight: 600;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #F1F5F9;
+  color: #334155;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.truncate {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty {
+  font-size: 13px;
+  color: #94A3B8;
+  margin: 0;
+}
+
+.weatherDetail {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.weatherImg {
+  width: 60px;
+  height: 60px;
+}
+
+.weatherBig {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+.weatherSub {
+  font-size: 13px;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.userList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.userItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #F1F5F9;
+  font-size: 13px;
+}
+
+.userItem:last-child {
+  border-bottom: none;
+}
+
+.userName {
+  color: #1E293B;
+  font-weight: 500;
+}
+
+.careLevel {
+  font-size: 11px;
+  background: #EFF6FF;
+  color: #2563EB;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}

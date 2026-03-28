@@ -1,0 +1,66 @@
+.header {
+  height: 60px;
+  background: #fff;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.date {
+  font-size: 13px;
+  color: #64748B;
+}
+
+.weather {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #F1F5F9;
+  padding: 4px 12px 4px 4px;
+  border-radius: 20px;
+}
+
+.weatherIcon {
+  width: 32px;
+  height: 32px;
+}
+
+.weatherTemp {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.weatherDesc {
+  font-size: 12px;
+  color: #64748B;
+}
+
+.time {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1E293B;
+  font-variant-numeric: tabular-nums;
+}
+
+.weatherCity {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563EB;
+}
