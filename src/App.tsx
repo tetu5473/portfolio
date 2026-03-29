@@ -1,7 +1,9 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { seedIfNeeded } from './utils/storage'
+import { isLoggedIn } from './utils/auth'
 import Layout from './components/Layout'
+import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import UserList from './pages/users/UserList'
 import CarePlanList from './pages/carePlans/CarePlanList'
@@ -9,6 +11,15 @@ import ProgressNoteList from './pages/progressNotes/ProgressNoteList'
 import MonitoringList from './pages/monitoring/MonitoringList'
 import MeetingList from './pages/meetings/MeetingList'
 import AISearch from './pages/AISearch'
+import OCR from './pages/OCR'
+import EmailSend from './pages/EmailSend'
+
+function RequireAuth({ children }: { children: React.ReactNode }) {
+  if (!isLoggedIn()) {
+    return <Navigate to="/login" replace />
+  }
+  return <>{children}</>
+}
 
 export default function App() {
   useEffect(() => {
@@ -18,7 +29,14 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Layout />}>
+        <Route path="/login" element={<Login />} />
+        <Route
+          element={
+            <RequireAuth>
+              <Layout />
+            </RequireAuth>
+          }
+        >
           <Route path="/" element={<Dashboard />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/care-plans" element={<CarePlanList />} />
@@ -26,6 +44,8 @@ export default function App() {
           <Route path="/monitoring" element={<MonitoringList />} />
           <Route path="/meetings" element={<MeetingList />} />
           <Route path="/search" element={<AISearch />} />
+          <Route path="/ocr" element={<OCR />} />
+          <Route path="/email" element={<EmailSend />} />
         </Route>
       </Routes>
     </BrowserRouter>

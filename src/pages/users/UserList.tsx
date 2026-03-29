@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useRef, type ChangeEvent } from 'react'
 import type { User } from '../../types'
 import { getUsers, deleteUser } from '../../utils/storage'
+import { exportUsers, importUsers } from '../../utils/excelUtils'
 import UserForm from './UserForm'
 import styles from '../ListPage.module.css'
 
@@ -8,6 +9,7 @@ export default function UserList() {
   const [users, setUsers] = useState<User[]>(() => getUsers())
   const [editingUser, setEditingUser] = useState<User | null>(null)
   const [showForm, setShowForm] = useState(false)
+  const importRef = useRef<HTMLInputElement>(null)
 
   function handleSaved() {
     setUsers(getUsers())
@@ -31,13 +33,38 @@ export default function UserList() {
     setShowForm(true)
   }
 
+  async function handleImport(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const { count, errors } = await importUsers(file)
+    setUsers(getUsers())
+    if (importRef.current) importRef.current.value = ''
+    const msg = `${count}件インポートしました。${errors.length > 0 ? '\n警告:\n' + errors.join('\n') : ''}`
+    window.alert(msg)
+  }
+
   return (
     <div>
       <div className={styles.toolbar}>
         <span className={styles.count}>{users.length}名</span>
-        <button className={styles.btnPrimary} onClick={handleNew}>
-          + 利用者追加
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button className={styles.btnEdit} onClick={() => exportUsers()}>
+            Excelエクスポート
+          </button>
+          <button className={styles.btnEdit} onClick={() => importRef.current?.click()}>
+            Excelインポート
+          </button>
+          <input
+            ref={importRef}
+            type="file"
+            accept=".xlsx,.xls"
+            style={{ display: 'none' }}
+            onChange={handleImport}
+          />
+          <button className={styles.btnPrimary} onClick={handleNew}>
+            + 利用者追加
+          </button>
+        </div>
       </div>
 
       {users.length === 0 ? (

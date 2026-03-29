@@ -12,6 +12,8 @@ const PAGE_TITLES: Record<string, string> = {
   '/monitoring': 'モニタリング',
   '/meetings': '担当者会議',
   '/search': 'AI検索',
+  '/ocr': '画像読み取り（OCR）',
+  '/email': 'メール送信',
 }
 
 function getTitle(pathname: string): string {

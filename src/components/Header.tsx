@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { WeatherData } from '../types'
 import { fetchWeather, getWeatherIconUrl } from '../utils/weatherApi'
+import { logout } from '../utils/auth'
 import styles from './Header.module.css'
 
 interface Props {
@@ -10,6 +12,12 @@ interface Props {
 export default function Header({ title }: Props) {
   const [weather, setWeather] = useState<WeatherData | null>(null)
   const [now, setNow] = useState(new Date())
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    logout()
+    navigate('/login')
+  }
 
   useEffect(() => {
     fetchWeather('Otaru').then(setWeather)
@@ -50,6 +58,9 @@ export default function Header({ title }: Props) {
             <span className={styles.weatherDesc}>{weather.description}</span>
           </div>
         )}
+        <button className={styles.logoutBtn} onClick={handleLogout}>
+          ログアウト
+        </button>
       </div>
     </header>
   )

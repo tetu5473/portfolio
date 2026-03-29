@@ -9,6 +9,8 @@ const navItems = [
   { to: '/monitoring', label: 'モニタリング', icon: '📊' },
   { to: '/meetings', label: '担当者会議', icon: '🤝' },
   { to: '/search', label: 'AI検索', icon: '🤖' },
+  { to: '/ocr', label: '画像読み取り', icon: '🖼️' },
+  { to: '/email', label: 'メール送信', icon: '✉️' },
 ]
 
 export default function Sidebar() {

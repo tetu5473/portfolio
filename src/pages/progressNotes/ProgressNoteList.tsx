@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { ProgressNote, User } from '../../types'
 import { getProgressNotes, deleteProgressNote, getUsers } from '../../utils/storage'
+import { exportProgressNotes } from '../../utils/excelUtils'
 import ProgressNoteForm from './ProgressNoteForm'
 import styles from '../ListPage.module.css'
 
@@ -37,9 +38,14 @@ export default function ProgressNoteList() {
           </select>
           <span className={styles.count}>{filtered.length}件</span>
         </div>
-        <button className={styles.btnPrimary} onClick={() => { setEditing(null); setShowForm(true) }}>
-          + 記録追加
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button className={styles.btnEdit} onClick={() => exportProgressNotes()}>
+            Excelエクスポート
+          </button>
+          <button className={styles.btnPrimary} onClick={() => { setEditing(null); setShowForm(true) }}>
+            + 記録追加
+          </button>
+        </div>
       </div>
 
       {filtered.length === 0 ? (
