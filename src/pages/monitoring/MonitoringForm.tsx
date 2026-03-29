@@ -26,6 +26,14 @@ export default function MonitoringForm({ monitoring, users, onSaved, onCancel }:
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault()
+      const form = e.currentTarget.closest('form')
+      if (form) form.requestSubmit()
+    }
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const saved: Monitoring = {
@@ -38,7 +46,7 @@ export default function MonitoringForm({ monitoring, users, onSaved, onCancel }:
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
       <div className={styles.grid2}>
         <div className={styles.field}>
           <label className={styles.label}>利用者 <span className={styles.required}>*</span></label>
