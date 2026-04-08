@@ -23,7 +23,7 @@ const KEYS = {
   progressNotes: 'care_progress_notes',
   monitoring: 'care_monitoring',
   meetings: 'care_meetings',
-  seeded: 'care_seeded',
+  seeded: 'care_seeded_v5',
 }
 
 // ── Users ──────────────────────────────────────────────────────────────────
@@ -130,6 +130,17 @@ export function deleteMeeting(id: string): void {
 export function seedIfNeeded(): void {
   if (localStorage.getItem(KEYS.seeded)) return
 
+  // 旧バージョンのデータをクリア
+  localStorage.removeItem('care_seeded')
+  localStorage.removeItem('care_seeded_v2')
+  localStorage.removeItem('care_seeded_v3')
+  localStorage.removeItem('care_seeded_v4')
+  localStorage.removeItem(KEYS.users)
+  localStorage.removeItem(KEYS.carePlans)
+  localStorage.removeItem(KEYS.progressNotes)
+  localStorage.removeItem(KEYS.monitoring)
+  localStorage.removeItem(KEYS.meetings)
+
   const user1Id = generateId()
   const user2Id = generateId()
   const user3Id = generateId()
@@ -183,8 +194,8 @@ export function seedIfNeeded(): void {
       longTermGoal: '自宅での生活を継続し、家族との交流を楽しむ',
       shortTermGoal: '週3回のデイサービス参加で身体機能を維持する',
       services: '訪問介護（週2回）、デイサービス（週3回）、訪問看護（月2回）',
-      startDate: '2024-04-01',
-      endDate: '2025-03-31',
+      startDate: '2026-04-01',
+      endDate: '2027-03-31',
       createdAt: new Date().toISOString(),
     },
     {
@@ -193,8 +204,18 @@ export function seedIfNeeded(): void {
       longTermGoal: '介護負担を軽減しながら安心して在宅生活を送る',
       shortTermGoal: '転倒防止のための環境整備と筋力維持',
       services: '訪問介護（週3回）、福祉用具貸与、訪問リハビリ（週1回）',
-      startDate: '2024-04-01',
-      endDate: '2025-03-31',
+      startDate: '2026-04-01',
+      endDate: '2027-03-31',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: generateId(),
+      userId: user3Id,
+      longTermGoal: '地域とのつながりを保ちながら、自立した生活を継続する',
+      shortTermGoal: '膝関節痛の改善と筋力維持により、屋外歩行を安全に行う',
+      services: '訪問介護（週1回）、訪問リハビリ（週1回）、福祉用具貸与',
+      startDate: '2026-04-01',
+      endDate: '2027-03-31',
       createdAt: new Date().toISOString(),
     },
   ]
@@ -203,17 +224,25 @@ export function seedIfNeeded(): void {
     {
       id: generateId(),
       userId: user1Id,
-      date: '2024-12-01',
+      date: '2026-01-15',
       author: '田中 美咲',
-      content: 'デイサービス参加。体調良好。入浴介助・食事介助実施。食欲あり、完食。笑顔で他利用者と会話を楽しんでいた。',
+      content: 'デイサービス参加。体調良好。入浴介助・食事介助実施。食欲あり、完食。笑顔で他利用者と会話を楽しんでいた。レクリエーションにも積極的に参加し、折り紙を楽しんでいた。',
       createdAt: new Date().toISOString(),
     },
     {
       id: generateId(),
       userId: user2Id,
-      date: '2024-12-02',
+      date: '2026-01-20',
       author: '佐藤 健太',
-      content: '訪問介護実施。若干倦怠感あり。血圧138/82mmHg。水分摂取を促した。排泄介助、更衣介助実施。',
+      content: '訪問介護実施。血圧138/82mmHg、脈拍72回/分。倦怠感の訴えあり、水分摂取を促した。排泄介助・更衣介助実施。室内の手すり使用状況を確認、問題なく活用できている。',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: generateId(),
+      userId: user3Id,
+      date: '2026-01-22',
+      author: '田中 美咲',
+      content: '訪問介護実施。体調良好。買い物同行支援を実施し、自ら商品を選ぶ場面も見られた。膝の痛みは軽減傾向にあるとのこと。リハビリへの意欲も高く、自主訓練を継続している。',
       createdAt: new Date().toISOString(),
     },
   ]
@@ -222,12 +251,34 @@ export function seedIfNeeded(): void {
     {
       id: generateId(),
       userId: user1Id,
-      date: '2024-12-15',
+      date: '2026-02-15',
       author: '田中 美咲',
-      physicalCondition: '体重維持。食欲良好。睡眠は概ね良好。',
-      mentalCondition: '穏やか。意欲的に活動参加。',
-      serviceStatus: 'デイサービス・訪問介護ともに計画通り利用できている。',
-      issues: '特になし',
+      physicalCondition: '体重維持（48kg）。食欲良好。睡眠は概ね良好だが、夜間トイレ回数が増加傾向。',
+      mentalCondition: '穏やか。デイサービスでの交流を楽しみにしている。意欲的に活動参加。',
+      serviceStatus: 'デイサービス・訪問介護ともに計画通り利用できている。訪問看護では血圧管理を継続中。',
+      issues: '夜間トイレ回数増加のため、転倒リスクに注意が必要。足元の照明設置を家族に提案済み。',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: generateId(),
+      userId: user2Id,
+      date: '2026-02-18',
+      author: '佐藤 健太',
+      physicalCondition: '体重60kg（前月比-1kg）。食欲やや低下。下肢筋力は維持されている。',
+      mentalCondition: '妻の体調不良を心配しており、やや不安な様子。会話は明瞭で認知機能に変化なし。',
+      serviceStatus: '訪問介護・訪問リハビリともに計画通り実施。福祉用具（歩行器）を適切に使用できている。',
+      issues: '妻の介護負担増大のリスクあり。家族支援の観点からも引き続きモニタリングが必要。',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: generateId(),
+      userId: user3Id,
+      date: '2026-02-20',
+      author: '田中 美咲',
+      physicalCondition: '体重52kg。膝関節痛は軽減傾向。歩行状態は安定しており、屋内は杖なしで歩行可能。',
+      mentalCondition: '明るく前向き。地域の体操教室への参加を希望しており、意欲が高い。',
+      serviceStatus: '訪問介護（週1回）は本人の希望により買い物支援中心に実施。サービスへの満足度高い。',
+      issues: '特になし。体操教室への参加に向けて地域情報を収集中。',
       createdAt: new Date().toISOString(),
     },
   ]
@@ -236,11 +287,31 @@ export function seedIfNeeded(): void {
     {
       id: generateId(),
       userId: user1Id,
-      date: '2024-12-10T14:00',
+      date: '2026-03-10T14:00',
       location: '山田様宅',
-      participants: '山田花子様、山田太郎様（息子）、田中美咲（CM）、デイサービス担当者',
-      agenda: '現在のサービス内容の確認、今後の方針について',
-      minutes: 'サービス内容に満足している旨を確認。息子より「最近よく笑うようになった」との報告あり。来年度も同様のプランで継続することを確認。',
+      participants: '山田花子様、山田太郎様（息子）、田中美咲（CM）、デイサービス担当者、訪問看護師',
+      agenda: '現在のサービス内容の確認、夜間の転倒リスク対策について',
+      minutes: 'サービス内容に満足している旨を確認。夜間トイレ時の転倒リスクについて協議し、足元センサーライトの設置を決定。息子より「最近よく笑うようになった」との報告あり。来年度も同様のプランで継続することを確認。',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: generateId(),
+      userId: user2Id,
+      date: '2026-03-12T10:00',
+      location: '鈴木様宅',
+      participants: '鈴木一郎様、鈴木京子様（妻）、佐藤健太（CM）、訪問リハビリ担当者',
+      agenda: '妻の介護負担軽減策の検討、リハビリの進捗確認',
+      minutes: '妻の体調不良が続いており、介護負担が増大していることを確認。ショートステイの活用について提案し、本人・妻ともに前向きに検討することになった。リハビリは順調で、歩行距離が前月より増加している。',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: generateId(),
+      userId: user3Id,
+      date: '2026-03-15T13:00',
+      location: 'デイサービスセンター会議室',
+      participants: '佐々木幸子様、佐々木明様（長男）、田中美咲（CM）、訪問介護員',
+      agenda: 'サービス利用状況の確認、今後の支援方針について',
+      minutes: '膝の痛みが軽減し、活動範囲が広がっていることを確認。本人より地域の体操教室に参加したいとの希望があり、参加に向けた支援を行うこととした。訪問介護の頻度は現状維持とし、自立支援を継続する方針を確認。',
       createdAt: new Date().toISOString(),
     },
   ]

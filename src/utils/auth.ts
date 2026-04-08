@@ -1,6 +1,6 @@
 const AUTH_KEY = 'care_auth'
 const DEFAULT_ID = 'admin'
-const DEFAULT_PASSWORD = 'care1234'
+const DEFAULT_PASSWORD = 'password'
 
 export function login(id: string, password: string): boolean {
   if (id === DEFAULT_ID && password === DEFAULT_PASSWORD) {
