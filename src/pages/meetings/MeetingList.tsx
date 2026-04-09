@@ -54,20 +54,27 @@ export default function MeetingList() {
                 <th>場所</th>
                 <th>参加者</th>
                 <th>議題</th>
+                <th>検討した内容</th>
+                <th>結論</th>
+                <th>今後の課題</th>
                 <th>操作</th>
+
               </tr>
             </thead>
             <tbody>
               {filtered.map((m) => {
                 const user = users.find((u) => u.id === m.userId)
                 return (
-                  <tr key={m.id}>
+                  <tr key={m.id} style={{ cursor: 'pointer' }} onClick={() => { setEditing(m); setShowForm(true) }}>
                     <td>{m.date.replace('T', ' ')}</td>
                     <td className={styles.bold}>{user?.name ?? '—'}</td>
                     <td>{m.location}</td>
                     <td className={styles.preWrap}>{m.participants}</td>
                     <td className={styles.preWrap}>{m.agenda}</td>
-                    <td className={styles.actions}>
+                    <td className={styles.preWrap}>{m.discussion}</td>
+                    <td className={styles.preWrap}>{m.conclusion}</td>
+                    <td className={styles.preWrap}>{m.futureTasks}</td>
+                    <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
                       <button className={styles.btnEdit} onClick={() => { setEditing(m); setShowForm(true) }}>編集</button>
                       <button className={styles.btnDelete} onClick={() => handleDelete(m.id)}>削除</button>
                     </td>

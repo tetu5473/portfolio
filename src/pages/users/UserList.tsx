@@ -86,7 +86,7 @@ export default function UserList() {
             </thead>
             <tbody>
               {users.map((u) => (
-                <tr key={u.id}>
+                <tr key={u.id} style={{ cursor: 'pointer' }} onClick={() => handleEdit(u)}>
                   <td className={styles.bold}>{u.name}</td>
                   <td>{u.nameKana}</td>
                   <td>{u.birthDate}</td>
@@ -96,7 +96,7 @@ export default function UserList() {
                   </td>
                   <td>{u.staffName}</td>
                   <td>{u.phone}</td>
-                  <td className={styles.actions}>
+                  <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
                     <button className={styles.btnEdit} onClick={() => handleEdit(u)}>
                       編集
                     </button>

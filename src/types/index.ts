@@ -51,7 +51,9 @@ export interface Meeting {
   location: string
   participants: string
   agenda: string
-  minutes: string
+  discussion: string
+  conclusion: string
+  futureTasks: string
   createdAt: string
 }
 

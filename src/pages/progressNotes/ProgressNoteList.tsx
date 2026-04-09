@@ -66,12 +66,12 @@ export default function ProgressNoteList() {
               {filtered.map((n) => {
                 const user = users.find((u) => u.id === n.userId)
                 return (
-                  <tr key={n.id}>
+                  <tr key={n.id} style={{ cursor: 'pointer' }} onClick={() => { setEditing(n); setShowForm(true) }}>
                     <td>{n.date}</td>
                     <td className={styles.bold}>{user?.name ?? '—'}</td>
                     <td>{n.author}</td>
                     <td className={styles.preWrap}>{n.content}</td>
-                    <td className={styles.actions}>
+                    <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
                       <button className={styles.btnEdit} onClick={() => { setEditing(n); setShowForm(true) }}>編集</button>
                       <button className={styles.btnDelete} onClick={() => handleDelete(n.id)}>削除</button>
                     </td>

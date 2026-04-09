@@ -72,14 +72,14 @@ export default function CarePlanList() {
               {filtered.map((p) => {
                 const user = users.find((u) => u.id === p.userId)
                 return (
-                  <tr key={p.id}>
+                  <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => { setEditing(p); setShowForm(true) }}>
                     <td className={styles.bold}>{user?.name ?? '—'}</td>
                     <td className={styles.preWrap}>{p.longTermGoal}</td>
                     <td className={styles.preWrap}>{p.shortTermGoal}</td>
                     <td className={styles.preWrap}>{p.services}</td>
                     <td>{p.startDate}</td>
                     <td>{p.endDate}</td>
-                    <td className={styles.actions}>
+                    <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
                       <button className={styles.btnEdit} onClick={() => { setEditing(p); setShowForm(true) }}>編集</button>
                       <button className={styles.btnDelete} onClick={() => handleDelete(p.id)}>削除</button>
                     </td>

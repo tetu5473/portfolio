@@ -62,14 +62,14 @@ export default function MonitoringList() {
               {filtered.map((m) => {
                 const user = users.find((u) => u.id === m.userId)
                 return (
-                  <tr key={m.id}>
+                  <tr key={m.id} style={{ cursor: 'pointer' }} onClick={() => { setEditing(m); setShowForm(true) }}>
                     <td>{m.date}</td>
                     <td className={styles.bold}>{user?.name ?? '—'}</td>
                     <td>{m.author}</td>
                     <td className={styles.preWrap}>{m.physicalCondition}</td>
                     <td className={styles.preWrap}>{m.mentalCondition}</td>
                     <td className={styles.preWrap}>{m.issues}</td>
-                    <td className={styles.actions}>
+                    <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
                       <button className={styles.btnEdit} onClick={() => { setEditing(m); setShowForm(true) }}>編集</button>
                       <button className={styles.btnDelete} onClick={() => handleDelete(m.id)}>削除</button>
                     </td>

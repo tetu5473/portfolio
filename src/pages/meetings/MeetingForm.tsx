@@ -18,7 +18,9 @@ export default function MeetingForm({ meeting, users, onSaved, onCancel }: Props
     location: meeting?.location ?? '',
     participants: meeting?.participants ?? '',
     agenda: meeting?.agenda ?? '',
-    minutes: meeting?.minutes ?? '',
+    discussion: meeting?.discussion ?? '',
+    conclusion: meeting?.conclusion ?? '',
+    futureTasks: meeting?.futureTasks ?? '',
   })
 
   function set(field: keyof typeof form, value: string) {
@@ -71,9 +73,18 @@ export default function MeetingForm({ meeting, users, onSaved, onCancel }: Props
         <textarea className={styles.textarea} value={form.agenda} onChange={(e) => set('agenda', e.target.value)} rows={2} placeholder="会議の主な議題を記入" />
       </div>
       <div className={styles.field}>
-        <label className={styles.label}>議事録</label>
-        <textarea className={styles.textarea} value={form.minutes} onChange={(e) => set('minutes', e.target.value)} rows={5} placeholder="会議の内容・決定事項等を記入" />
+        <label className={styles.label}>検討した内容</label>
+        <textarea className={styles.textarea} value={form.discussion} onChange={(e) => set('discussion', e.target.value)} rows={3} placeholder="会議で検討・協議した内容を記入" />
       </div>
+      <div className={styles.field}>
+        <label className={styles.label}>結論</label>
+        <textarea className={styles.textarea} value={form.conclusion} onChange={(e) => set('conclusion', e.target.value)} rows={2} placeholder="会議で決定した結論・方針を記入" />
+      </div>
+      <div className={styles.field}>
+        <label className={styles.label}>今後の課題</label>
+        <textarea className={styles.textarea} value={form.futureTasks} onChange={(e) => set('futureTasks', e.target.value)} rows={2} placeholder="今後対応が必要な課題を記入" />
+      </div>
+
       <div className={styles.formActions}>
         <button type="button" className={styles.btnSecondary} onClick={onCancel}>キャンセル</button>
         <button type="submit" className={styles.btnPrimary}>保存</button>

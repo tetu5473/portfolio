@@ -23,7 +23,7 @@ const KEYS = {
   progressNotes: 'care_progress_notes',
   monitoring: 'care_monitoring',
   meetings: 'care_meetings',
-  seeded: 'care_seeded_v5',
+  seeded: 'care_seeded_v6',
 }
 
 // ── Users ──────────────────────────────────────────────────────────────────
@@ -135,6 +135,7 @@ export function seedIfNeeded(): void {
   localStorage.removeItem('care_seeded_v2')
   localStorage.removeItem('care_seeded_v3')
   localStorage.removeItem('care_seeded_v4')
+  localStorage.removeItem('care_seeded_v5')
   localStorage.removeItem(KEYS.users)
   localStorage.removeItem(KEYS.carePlans)
   localStorage.removeItem(KEYS.progressNotes)
@@ -291,7 +292,9 @@ export function seedIfNeeded(): void {
       location: '山田様宅',
       participants: '山田花子様、山田太郎様（息子）、田中美咲（CM）、デイサービス担当者、訪問看護師',
       agenda: '現在のサービス内容の確認、夜間の転倒リスク対策について',
-      minutes: 'サービス内容に満足している旨を確認。夜間トイレ時の転倒リスクについて協議し、足元センサーライトの設置を決定。息子より「最近よく笑うようになった」との報告あり。来年度も同様のプランで継続することを確認。',
+      discussion: '夜間トイレ時の転倒リスクについて各担当者から意見を出し合った。訪問看護師より夜間の排尿回数増加が確認されており、足元の安全確保が急務との意見が出た。デイサービス担当者からは日中の水分補給管理の提案があった。',
+      conclusion: '足元センサーライトを寝室とトイレの導線に設置することを決定。来年度も現行サービス内容で継続する。日中の水分補給はデイサービスで引き続き促す。',
+      futureTasks: '息子によるセンサーライト設置（2026年3月末まで）。設置後の転倒リスク再評価を次回モニタリング時に実施。夜間排尿回数の変化を訪問看護で継続観察。',
       createdAt: new Date().toISOString(),
     },
     {
@@ -301,7 +304,9 @@ export function seedIfNeeded(): void {
       location: '鈴木様宅',
       participants: '鈴木一郎様、鈴木京子様（妻）、佐藤健太（CM）、訪問リハビリ担当者',
       agenda: '妻の介護負担軽減策の検討、リハビリの進捗確認',
-      minutes: '妻の体調不良が続いており、介護負担が増大していることを確認。ショートステイの活用について提案し、本人・妻ともに前向きに検討することになった。リハビリは順調で、歩行距離が前月より増加している。',
+      discussion: '妻の体調不良が続いており、日常的な介護負担が増大していることを全員で共有。訪問リハビリ担当者よりリハビリの進捗として歩行距離の増加が報告された。CMよりショートステイ活用の提案を行い、本人・妻双方に説明した。',
+      conclusion: 'ショートステイを月1〜2回活用する方向で前向きに検討することを確認。リハビリは現行内容で継続。妻の負担軽減を最優先に今後の支援を組み立てる。',
+      futureTasks: 'ショートステイ施設の情報収集・見学調整（CM担当）。妻の体調状況を次回訪問時に再確認。リハビリの歩行目標距離を次回設定する。',
       createdAt: new Date().toISOString(),
     },
     {
@@ -311,7 +316,9 @@ export function seedIfNeeded(): void {
       location: 'デイサービスセンター会議室',
       participants: '佐々木幸子様、佐々木明様（長男）、田中美咲（CM）、訪問介護員',
       agenda: 'サービス利用状況の確認、今後の支援方針について',
-      minutes: '膝の痛みが軽減し、活動範囲が広がっていることを確認。本人より地域の体操教室に参加したいとの希望があり、参加に向けた支援を行うこととした。訪問介護の頻度は現状維持とし、自立支援を継続する方針を確認。',
+      discussion: '膝関節痛の軽減により屋内歩行が安定し、活動範囲が広がっていることを確認。本人より地域の体操教室への参加希望が出され、長男も賛成。訪問介護員より買い物同行時の自立度が高まっているとの報告があった。',
+      conclusion: '訪問介護の頻度は現状維持（週1回）とし、自立支援を継続する方針を確認。地域の体操教室への参加に向けてCMが情報収集・同行支援を行う。',
+      futureTasks: '地域体操教室の日程・参加条件をCMが確認し、本人・長男に情報提供（4月中）。次回モニタリング時に体操教室参加状況を評価する。屋外歩行の安全性確認を訪問介護時に継続する。',
       createdAt: new Date().toISOString(),
     },
   ]

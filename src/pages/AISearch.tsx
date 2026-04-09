@@ -56,6 +56,9 @@ export default function AISearch() {
     try {
       const reply = await askClaude(newMessages)
       setMessages([...newMessages, { role: 'assistant', content: reply }])
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'エラーが発生しました'
+      setMessages([...newMessages, { role: 'assistant', content: `⚠️ ${msg}` }])
     } finally {
       setLoading(false)
     }
