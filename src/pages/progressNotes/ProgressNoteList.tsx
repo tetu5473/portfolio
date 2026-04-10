@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { ProgressNote, User } from '../../types'
 import { getProgressNotes, deleteProgressNote, getUsers } from '../../utils/storage'
 import { exportProgressNotes } from '../../utils/excelUtils'
+import { exportProgressNotesPDF } from '../../utils/pdfUtils'
 import { useListPage } from '../../hooks/useListPage'
 import ProgressNoteForm from './ProgressNoteForm'
 import styles from '../ListPage.module.css'
@@ -25,6 +26,7 @@ export default function ProgressNoteList() {
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button className={styles.btnEdit} onClick={() => exportProgressNotes()}>Excelエクスポート</button>
+          <button className={styles.btnEdit} onClick={() => exportProgressNotesPDF(filtered, users)}>PDFエクスポート</button>
           <button className={styles.btnPrimary} onClick={handleNew}>+ 記録追加</button>
         </div>
       </div>

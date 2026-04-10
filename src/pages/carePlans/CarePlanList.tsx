@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { CarePlan, User } from '../../types'
 import { getCarePlans, deleteCarePlan, getUsers } from '../../utils/storage'
 import { exportCarePlans } from '../../utils/excelUtils'
+import { exportCarePlansPDF } from '../../utils/pdfUtils'
 import { useListPage } from '../../hooks/useListPage'
 import CarePlanForm from './CarePlanForm'
 import styles from '../ListPage.module.css'
@@ -23,6 +24,7 @@ export default function CarePlanList() {
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button className={styles.btnEdit} onClick={() => exportCarePlans()}>Excelエクスポート</button>
+          <button className={styles.btnEdit} onClick={() => exportCarePlansPDF(filtered, users)}>PDFエクスポート</button>
           <button className={styles.btnPrimary} onClick={handleNew}>+ ケアプラン追加</button>
         </div>
       </div>

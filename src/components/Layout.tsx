@@ -1,6 +1,8 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Header from './Header'
+import FloatingAI from './FloatingAI'
+import TextImprove from './TextImprove'
 import styles from './Layout.module.css'
 
 const PAGE_TITLES: Record<string, string> = {
@@ -37,6 +39,8 @@ export default function Layout() {
           <Outlet />
         </main>
       </div>
+      <FloatingAI />
+      <TextImprove />
     </div>
   )
 }

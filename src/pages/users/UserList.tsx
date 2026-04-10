@@ -1,4 +1,5 @@
 import { useRef, type ChangeEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { User } from '../../types'
 import { getUsers, deleteUser } from '../../utils/storage'
 import { exportUsers, importUsers } from '../../utils/excelUtils'
@@ -7,6 +8,7 @@ import UserForm from './UserForm'
 import styles from '../ListPage.module.css'
 
 export default function UserList() {
+  const navigate = useNavigate()
   const { list: users, editing, showForm, handleSaved, handleEdit, handleNew, handleDelete, handleClose } =
     useListPage<User>({ fetchAll: getUsers, deleteItem: deleteUser })
   const importRef = useRef<HTMLInputElement>(null)
@@ -45,7 +47,7 @@ export default function UserList() {
             </thead>
             <tbody>
               {users.map((u) => (
-                <tr key={u.id} style={{ cursor: 'pointer' }} onClick={() => handleEdit(u)}>
+                <tr key={u.id} style={{ cursor: 'pointer' }} onClick={() => navigate(`/users/${u.id}`)}>
                   <td className={styles.bold}>{u.name}</td>
                   <td>{u.nameKana}</td>
                   <td>{u.birthDate}</td>

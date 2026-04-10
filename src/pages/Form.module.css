@@ -92,3 +92,41 @@
 .btnSecondary:hover {
   background: #F8FAFC;
 }
+
+.textareaWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.voiceBtn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #EFF6FF;
+  color: #2563EB;
+  transition: background 0.15s;
+  z-index: 1;
+}
+
+.voiceBtn:hover { background: #DBEAFE; }
+
+.voiceBtnActive {
+  background: #FEE2E2;
+  color: #DC2626;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}

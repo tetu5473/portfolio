@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { ProgressNote, User } from '../../types'
 import { saveProgressNote } from '../../utils/storage'
 import { generateId } from '../../utils/idUtils'
+import { useVoiceInput } from '../../hooks/useVoiceInput'
 import styles from '../Form.module.css'
 
 interface Props {
@@ -17,6 +18,10 @@ export default function ProgressNoteForm({ note, users, onSaved, onCancel }: Pro
     date: note?.date ?? new Date().toISOString().slice(0, 10),
     author: note?.author ?? '',
     content: note?.content ?? '',
+  })
+
+  const voice = useVoiceInput({
+    onResult: (text) => set('content', form.content ? form.content + ' ' + text : text),
   })
 
   function set(field: keyof typeof form, value: string) {
@@ -62,7 +67,12 @@ export default function ProgressNoteForm({ note, users, onSaved, onCancel }: Pro
       </div>
       <div className={styles.field}>
         <label className={styles.label}>経過内容 <span className={styles.required}>*</span></label>
-        <textarea className={styles.textarea} value={form.content} onChange={(e) => set('content', e.target.value)} required rows={5} placeholder="実施したサービスの内容・利用者の状態等を記入してください" />
+        <div className={styles.textareaWrap}>
+          <textarea className={styles.textarea} value={form.content} onChange={(e) => set('content', e.target.value)} required rows={5} placeholder="実施したサービスの内容・利用者の状態等を記入してください" style={{ paddingBottom: 40 }} />
+          <button type="button" className={`${styles.voiceBtn} ${voice.listening ? styles.voiceBtnActive : ''}`} onClick={voice.listening ? voice.stop : voice.start} title="音声入力">
+            {voice.listening ? '⏹' : '🎤'}
+          </button>
+        </div>
       </div>
       <div className={styles.formActions}>
         <button type="button" className={styles.btnSecondary} onClick={onCancel}>キャンセル</button>

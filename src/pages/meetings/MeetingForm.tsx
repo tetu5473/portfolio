@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Meeting, User } from '../../types'
 import { saveMeeting } from '../../utils/storage'
 import { generateId } from '../../utils/idUtils'
+import { useVoiceInput } from '../../hooks/useVoiceInput'
 import styles from '../Form.module.css'
 
 interface Props {
@@ -26,6 +27,11 @@ export default function MeetingForm({ meeting, users, onSaved, onCancel }: Props
   function set(field: keyof typeof form, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
+
+  const voiceParticipants = useVoiceInput({ onResult: (t) => set('participants', form.participants ? form.participants + ' ' + t : t) })
+  const voiceDiscussion = useVoiceInput({ onResult: (t) => set('discussion', form.discussion ? form.discussion + ' ' + t : t) })
+  const voiceConclusion = useVoiceInput({ onResult: (t) => set('conclusion', form.conclusion ? form.conclusion + ' ' + t : t) })
+  const voiceFutureTasks = useVoiceInput({ onResult: (t) => set('futureTasks', form.futureTasks ? form.futureTasks + ' ' + t : t) })
 
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
@@ -66,7 +72,10 @@ export default function MeetingForm({ meeting, users, onSaved, onCancel }: Props
       </div>
       <div className={styles.field}>
         <label className={styles.label}>参加者 <span className={styles.required}>*</span></label>
-        <textarea className={styles.textarea} value={form.participants} onChange={(e) => set('participants', e.target.value)} required rows={2} placeholder="利用者名、家族名（続柄）、担当CM、各サービス担当者名" />
+        <div className={styles.textareaWrap}>
+          <textarea className={styles.textarea} value={form.participants} onChange={(e) => set('participants', e.target.value)} required rows={2} placeholder="利用者名、家族名（続柄）、担当CM、各サービス担当者名" style={{ paddingBottom: 40 }} />
+          <button type="button" className={`${styles.voiceBtn} ${voiceParticipants.listening ? styles.voiceBtnActive : ''}`} onClick={voiceParticipants.listening ? voiceParticipants.stop : voiceParticipants.start} title="音声入力">{voiceParticipants.listening ? '⏹' : '🎤'}</button>
+        </div>
       </div>
       <div className={styles.field}>
         <label className={styles.label}>議題</label>
@@ -74,15 +83,24 @@ export default function MeetingForm({ meeting, users, onSaved, onCancel }: Props
       </div>
       <div className={styles.field}>
         <label className={styles.label}>検討した内容</label>
-        <textarea className={styles.textarea} value={form.discussion} onChange={(e) => set('discussion', e.target.value)} rows={3} placeholder="会議で検討・協議した内容を記入" />
+        <div className={styles.textareaWrap}>
+          <textarea className={styles.textarea} value={form.discussion} onChange={(e) => set('discussion', e.target.value)} rows={3} placeholder="会議で検討・協議した内容を記入" style={{ paddingBottom: 40 }} />
+          <button type="button" className={`${styles.voiceBtn} ${voiceDiscussion.listening ? styles.voiceBtnActive : ''}`} onClick={voiceDiscussion.listening ? voiceDiscussion.stop : voiceDiscussion.start} title="音声入力">{voiceDiscussion.listening ? '⏹' : '🎤'}</button>
+        </div>
       </div>
       <div className={styles.field}>
         <label className={styles.label}>結論</label>
-        <textarea className={styles.textarea} value={form.conclusion} onChange={(e) => set('conclusion', e.target.value)} rows={2} placeholder="会議で決定した結論・方針を記入" />
+        <div className={styles.textareaWrap}>
+          <textarea className={styles.textarea} value={form.conclusion} onChange={(e) => set('conclusion', e.target.value)} rows={2} placeholder="会議で決定した結論・方針を記入" style={{ paddingBottom: 40 }} />
+          <button type="button" className={`${styles.voiceBtn} ${voiceConclusion.listening ? styles.voiceBtnActive : ''}`} onClick={voiceConclusion.listening ? voiceConclusion.stop : voiceConclusion.start} title="音声入力">{voiceConclusion.listening ? '⏹' : '🎤'}</button>
+        </div>
       </div>
       <div className={styles.field}>
         <label className={styles.label}>今後の課題</label>
-        <textarea className={styles.textarea} value={form.futureTasks} onChange={(e) => set('futureTasks', e.target.value)} rows={2} placeholder="今後対応が必要な課題を記入" />
+        <div className={styles.textareaWrap}>
+          <textarea className={styles.textarea} value={form.futureTasks} onChange={(e) => set('futureTasks', e.target.value)} rows={2} placeholder="今後対応が必要な課題を記入" style={{ paddingBottom: 40 }} />
+          <button type="button" className={`${styles.voiceBtn} ${voiceFutureTasks.listening ? styles.voiceBtnActive : ''}`} onClick={voiceFutureTasks.listening ? voiceFutureTasks.stop : voiceFutureTasks.start} title="音声入力">{voiceFutureTasks.listening ? '⏹' : '🎤'}</button>
+        </div>
       </div>
 
       <div className={styles.formActions}>

@@ -6,6 +6,7 @@ import Layout from './components/Layout'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import UserList from './pages/users/UserList'
+import UserProfile from './pages/users/UserProfile'
 import CarePlanList from './pages/carePlans/CarePlanList'
 import ProgressNoteList from './pages/progressNotes/ProgressNoteList'
 import MonitoringList from './pages/monitoring/MonitoringList'
@@ -45,6 +46,7 @@ export default function App() {
         >
           <Route path="/" element={<Dashboard />} />
           <Route path="/users" element={<UserList />} />
+          <Route path="/users/:id" element={<UserProfile />} />
           <Route path="/care-plans" element={<CarePlanList />} />
           <Route path="/progress-notes" element={<ProgressNoteList />} />
           <Route path="/monitoring" element={<MonitoringList />} />

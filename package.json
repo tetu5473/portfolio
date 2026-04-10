@@ -11,9 +11,12 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@types/react-router-dom": "^5.3.3",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.13.2",
+    "recharts": "^3.8.1",
     "tesseract.js": "^7.0.0",
     "xlsx": "^0.18.5"
   },
