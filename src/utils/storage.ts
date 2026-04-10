@@ -26,105 +26,42 @@ const KEYS = {
   seeded: 'care_seeded_v6',
 }
 
-// ── Users ──────────────────────────────────────────────────────────────────
-export function getUsers(): User[] {
-  return getItems<User>(KEYS.users)
-}
-
-export function saveUser(user: User): void {
-  const users = getUsers()
-  const idx = users.findIndex((u) => u.id === user.id)
+// ── Generic CRUD ───────────────────────────────────────────────────────────
+function saveItem<T extends { id: string }>(key: string, item: T): void {
+  const items = getItems<T>(key)
+  const idx = items.findIndex((x) => x.id === item.id)
   if (idx >= 0) {
-    users[idx] = user
+    items[idx] = item
   } else {
-    users.push(user)
+    items.push(item)
   }
-  setItems(KEYS.users, users)
+  setItems(key, items)
 }
 
-export function deleteUser(id: string): void {
-  setItems(KEYS.users, getUsers().filter((u) => u.id !== id))
-}
+// ── Users ──────────────────────────────────────────────────────────────────
+export function getUsers(): User[] { return getItems<User>(KEYS.users) }
+export function saveUser(user: User): void { saveItem(KEYS.users, user) }
+export function deleteUser(id: string): void { setItems(KEYS.users, getUsers().filter((u) => u.id !== id)) }
 
 // ── CarePlans ──────────────────────────────────────────────────────────────
-export function getCarePlans(): CarePlan[] {
-  return getItems<CarePlan>(KEYS.carePlans)
-}
-
-export function saveCarePlan(plan: CarePlan): void {
-  const plans = getCarePlans()
-  const idx = plans.findIndex((p) => p.id === plan.id)
-  if (idx >= 0) {
-    plans[idx] = plan
-  } else {
-    plans.push(plan)
-  }
-  setItems(KEYS.carePlans, plans)
-}
-
-export function deleteCarePlan(id: string): void {
-  setItems(KEYS.carePlans, getCarePlans().filter((p) => p.id !== id))
-}
+export function getCarePlans(): CarePlan[] { return getItems<CarePlan>(KEYS.carePlans) }
+export function saveCarePlan(plan: CarePlan): void { saveItem(KEYS.carePlans, plan) }
+export function deleteCarePlan(id: string): void { setItems(KEYS.carePlans, getCarePlans().filter((p) => p.id !== id)) }
 
 // ── ProgressNotes ──────────────────────────────────────────────────────────
-export function getProgressNotes(): ProgressNote[] {
-  return getItems<ProgressNote>(KEYS.progressNotes)
-}
-
-export function saveProgressNote(note: ProgressNote): void {
-  const notes = getProgressNotes()
-  const idx = notes.findIndex((n) => n.id === note.id)
-  if (idx >= 0) {
-    notes[idx] = note
-  } else {
-    notes.push(note)
-  }
-  setItems(KEYS.progressNotes, notes)
-}
-
-export function deleteProgressNote(id: string): void {
-  setItems(KEYS.progressNotes, getProgressNotes().filter((n) => n.id !== id))
-}
+export function getProgressNotes(): ProgressNote[] { return getItems<ProgressNote>(KEYS.progressNotes) }
+export function saveProgressNote(note: ProgressNote): void { saveItem(KEYS.progressNotes, note) }
+export function deleteProgressNote(id: string): void { setItems(KEYS.progressNotes, getProgressNotes().filter((n) => n.id !== id)) }
 
 // ── Monitoring ─────────────────────────────────────────────────────────────
-export function getMonitoringList(): Monitoring[] {
-  return getItems<Monitoring>(KEYS.monitoring)
-}
-
-export function saveMonitoring(monitoring: Monitoring): void {
-  const list = getMonitoringList()
-  const idx = list.findIndex((m) => m.id === monitoring.id)
-  if (idx >= 0) {
-    list[idx] = monitoring
-  } else {
-    list.push(monitoring)
-  }
-  setItems(KEYS.monitoring, list)
-}
-
-export function deleteMonitoring(id: string): void {
-  setItems(KEYS.monitoring, getMonitoringList().filter((m) => m.id !== id))
-}
+export function getMonitoringList(): Monitoring[] { return getItems<Monitoring>(KEYS.monitoring) }
+export function saveMonitoring(monitoring: Monitoring): void { saveItem(KEYS.monitoring, monitoring) }
+export function deleteMonitoring(id: string): void { setItems(KEYS.monitoring, getMonitoringList().filter((m) => m.id !== id)) }
 
 // ── Meetings ───────────────────────────────────────────────────────────────
-export function getMeetings(): Meeting[] {
-  return getItems<Meeting>(KEYS.meetings)
-}
-
-export function saveMeeting(meeting: Meeting): void {
-  const meetings = getMeetings()
-  const idx = meetings.findIndex((m) => m.id === meeting.id)
-  if (idx >= 0) {
-    meetings[idx] = meeting
-  } else {
-    meetings.push(meeting)
-  }
-  setItems(KEYS.meetings, meetings)
-}
-
-export function deleteMeeting(id: string): void {
-  setItems(KEYS.meetings, getMeetings().filter((m) => m.id !== id))
-}
+export function getMeetings(): Meeting[] { return getItems<Meeting>(KEYS.meetings) }
+export function saveMeeting(meeting: Meeting): void { saveItem(KEYS.meetings, meeting) }
+export function deleteMeeting(id: string): void { setItems(KEYS.meetings, getMeetings().filter((m) => m.id !== id)) }
 
 // ── Seed Data ──────────────────────────────────────────────────────────────
 export function seedIfNeeded(): void {

@@ -1,31 +1,16 @@
 import { useState } from 'react'
 import type { Monitoring, User } from '../../types'
 import { getMonitoringList, deleteMonitoring, getUsers } from '../../utils/storage'
+import { useListPage } from '../../hooks/useListPage'
 import MonitoringForm from './MonitoringForm'
 import styles from '../ListPage.module.css'
 
+const byDateDesc = (a: Monitoring, b: Monitoring) => b.date.localeCompare(a.date)
+
 export default function MonitoringList() {
-  const [list, setList] = useState<Monitoring[]>(() =>
-    [...getMonitoringList()].sort((a, b) => b.date.localeCompare(a.date))
-  )
   const [users] = useState<User[]>(() => getUsers())
-  const [editing, setEditing] = useState<Monitoring | null>(null)
-  const [showForm, setShowForm] = useState(false)
-  const [filterUserId, setFilterUserId] = useState('')
-
-  function handleSaved() {
-    setList([...getMonitoringList()].sort((a, b) => b.date.localeCompare(a.date)))
-    setShowForm(false)
-    setEditing(null)
-  }
-
-  function handleDelete(id: string) {
-    if (!window.confirm('このモニタリング記録を削除しますか？')) return
-    deleteMonitoring(id)
-    setList([...getMonitoringList()].sort((a, b) => b.date.localeCompare(a.date)))
-  }
-
-  const filtered = filterUserId ? list.filter((m) => m.userId === filterUserId) : list
+  const { filtered, editing, showForm, filterUserId, setFilterUserId, handleSaved, handleEdit, handleNew, handleDelete, handleClose } =
+    useListPage<Monitoring>({ fetchAll: getMonitoringList, deleteItem: deleteMonitoring, sort: byDateDesc })
 
   return (
     <div>
@@ -37,9 +22,7 @@ export default function MonitoringList() {
           </select>
           <span className={styles.count}>{filtered.length}件</span>
         </div>
-        <button className={styles.btnPrimary} onClick={() => { setEditing(null); setShowForm(true) }}>
-          + モニタリング追加
-        </button>
+        <button className={styles.btnPrimary} onClick={handleNew}>+ モニタリング追加</button>
       </div>
 
       {filtered.length === 0 ? (
@@ -49,20 +32,15 @@ export default function MonitoringList() {
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>日付</th>
-                <th>利用者</th>
-                <th>記録者</th>
-                <th>身体状態</th>
-                <th>精神状態</th>
-                <th>課題</th>
-                <th>操作</th>
+                <th>日付</th><th>利用者</th><th>記録者</th>
+                <th>身体状態</th><th>精神状態</th><th>課題</th><th>操作</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((m) => {
                 const user = users.find((u) => u.id === m.userId)
                 return (
-                  <tr key={m.id} style={{ cursor: 'pointer' }} onClick={() => { setEditing(m); setShowForm(true) }}>
+                  <tr key={m.id} style={{ cursor: 'pointer' }} onClick={() => handleEdit(m)}>
                     <td>{m.date}</td>
                     <td className={styles.bold}>{user?.name ?? '—'}</td>
                     <td>{m.author}</td>
@@ -70,8 +48,8 @@ export default function MonitoringList() {
                     <td className={styles.preWrap}>{m.mentalCondition}</td>
                     <td className={styles.preWrap}>{m.issues}</td>
                     <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
-                      <button className={styles.btnEdit} onClick={() => { setEditing(m); setShowForm(true) }}>編集</button>
-                      <button className={styles.btnDelete} onClick={() => handleDelete(m.id)}>削除</button>
+                      <button className={styles.btnEdit} onClick={() => handleEdit(m)}>編集</button>
+                      <button className={styles.btnDelete} onClick={() => handleDelete(m.id, 'このモニタリング記録を削除しますか？')}>削除</button>
                     </td>
                   </tr>
                 )
@@ -82,13 +60,13 @@ export default function MonitoringList() {
       )}
 
       {showForm && (
-        <div className={styles.modalOverlay} onClick={() => setShowForm(false)}>
+        <div className={styles.modalOverlay} onClick={handleClose}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <h2>{editing ? 'モニタリング編集' : 'モニタリング追加'}</h2>
-              <button className={styles.modalClose} onClick={() => setShowForm(false)}>✕</button>
+              <button className={styles.modalClose} onClick={handleClose}>✕</button>
             </div>
-            <MonitoringForm monitoring={editing} users={users} onSaved={handleSaved} onCancel={() => setShowForm(false)} />
+            <MonitoringForm monitoring={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
           </div>
         </div>
       )}

@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { seedIfNeeded } from './utils/storage'
 import { isLoggedIn } from './utils/auth'
 import Layout from './components/Layout'
@@ -15,9 +15,15 @@ import OCR from './pages/OCR'
 import EmailSend from './pages/EmailSend'
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
-  if (!isLoggedIn()) {
-    return <Navigate to="/login" replace />
-  }
+  const [loggedIn, setLoggedIn] = useState(isLoggedIn())
+
+  useEffect(() => {
+    const handler = () => setLoggedIn(isLoggedIn())
+    window.addEventListener('storage', handler)
+    return () => window.removeEventListener('storage', handler)
+  }, [])
+
+  if (!loggedIn) return <Navigate to="/login" replace />
   return <>{children}</>
 }
 

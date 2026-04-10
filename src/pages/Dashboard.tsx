@@ -1,20 +1,12 @@
-import { useEffect, useState } from 'react'
-import type { WeatherData } from '../types'
+import { useState } from 'react'
 import { getUsers, getCarePlans, getProgressNotes, getMeetings } from '../utils/storage'
-import { fetchWeather, getWeatherIconUrl } from '../utils/weatherApi'
 import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
-  const [weather, setWeather] = useState<WeatherData | null>(null)
-
-  const users = getUsers()
-  const carePlans = getCarePlans()
-  const progressNotes = getProgressNotes()
-  const meetings = getMeetings()
-
-  useEffect(() => {
-    fetchWeather('Otaru').then(setWeather)
-  }, [])
+  const [users] = useState(() => getUsers())
+  const [carePlans] = useState(() => getCarePlans())
+  const [progressNotes] = useState(() => getProgressNotes())
+  const [meetings] = useState(() => getMeetings())
 
   const stats = [
     { label: '利用者数', value: users.length, unit: '名', color: '#2563EB' },
@@ -74,24 +66,6 @@ export default function Dashboard() {
         </div>
 
         <div className={styles.sideCards}>
-          {weather && (
-            <div className={styles.card}>
-              <h2 className={styles.cardTitle}>今日の天気（東京）</h2>
-              <div className={styles.weatherDetail}>
-                <img
-                  src={getWeatherIconUrl(weather.icon)}
-                  alt={weather.description}
-                  className={styles.weatherImg}
-                />
-                <div>
-                  <div className={styles.weatherBig}>{weather.temp}°C</div>
-                  <div className={styles.weatherSub}>{weather.description}</div>
-                  <div className={styles.weatherSub}>湿度 {weather.humidity}%</div>
-                </div>
-              </div>
-            </div>
-          )}
-
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>利用者一覧</h2>
             {users.length === 0 ? (
