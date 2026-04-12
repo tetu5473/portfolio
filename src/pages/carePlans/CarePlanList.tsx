@@ -1,49 +1,28 @@
 import { useState } from 'react'
 import type { CarePlan, User } from '../../types'
 import { getCarePlans, deleteCarePlan, getUsers } from '../../utils/storage'
+import { exportCarePlans } from '../../utils/excelUtils'
+import { exportCarePlansPDF } from '../../utils/pdfUtils'
+import { useListPage } from '../../hooks/useListPage'
 import CarePlanForm from './CarePlanForm'
+import Modal from '../../components/Modal'
+import UserFilterSelect from '../../components/UserFilterSelect'
 import styles from '../ListPage.module.css'
 
 export default function CarePlanList() {
-  const [plans, setPlans] = useState<CarePlan[]>(() => getCarePlans())
   const [users] = useState<User[]>(() => getUsers())
-  const [editing, setEditing] = useState<CarePlan | null>(null)
-  const [showForm, setShowForm] = useState(false)
-  const [filterUserId, setFilterUserId] = useState('')
-
-  function handleSaved() {
-    setPlans(getCarePlans())
-    setShowForm(false)
-    setEditing(null)
-  }
-
-  function handleDelete(id: string) {
-    if (!window.confirm('このケアプランを削除しますか？')) return
-    deleteCarePlan(id)
-    setPlans(getCarePlans())
-  }
-
-  const filtered = filterUserId ? plans.filter((p) => p.userId === filterUserId) : plans
+  const { filtered, editing, showForm, filterUserId, setFilterUserId, handleSaved, handleEdit, handleNew, handleDelete, handleClose } =
+    useListPage<CarePlan>({ fetchAll: getCarePlans, deleteItem: deleteCarePlan })
 
   return (
     <div>
       <div className={styles.toolbar}>
-        <div className={styles.filterBar}>
-          <select
-            className={styles.filterSelect}
-            value={filterUserId}
-            onChange={(e) => setFilterUserId(e.target.value)}
-          >
-            <option value="">全利用者</option>
-            {users.map((u) => (
-              <option key={u.id} value={u.id}>{u.name}</option>
-            ))}
-          </select>
-          <span className={styles.count}>{filtered.length}件</span>
+        <UserFilterSelect users={users} value={filterUserId} onChange={setFilterUserId} count={filtered.length} />
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button className={styles.btnEdit} onClick={() => exportCarePlans()}>Excelエクスポート</button>
+          <button className={styles.btnEdit} onClick={() => exportCarePlansPDF(filtered, users)}>PDFエクスポート</button>
+          <button className={styles.btnPrimary} onClick={handleNew}>+ ケアプラン追加</button>
         </div>
-        <button className={styles.btnPrimary} onClick={() => { setEditing(null); setShowForm(true) }}>
-          + ケアプラン追加
-        </button>
       </div>
 
       {filtered.length === 0 ? (
@@ -53,29 +32,24 @@ export default function CarePlanList() {
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>利用者</th>
-                <th>長期目標</th>
-                <th>短期目標</th>
-                <th>サービス内容</th>
-                <th>開始日</th>
-                <th>終了日</th>
-                <th>操作</th>
+                <th>利用者</th><th>長期目標</th><th>短期目標</th>
+                <th>サービス内容</th><th>開始日</th><th>終了日</th><th>操作</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((p) => {
                 const user = users.find((u) => u.id === p.userId)
                 return (
-                  <tr key={p.id}>
+                  <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => handleEdit(p)}>
                     <td className={styles.bold}>{user?.name ?? '—'}</td>
                     <td className={styles.preWrap}>{p.longTermGoal}</td>
                     <td className={styles.preWrap}>{p.shortTermGoal}</td>
                     <td className={styles.preWrap}>{p.services}</td>
                     <td>{p.startDate}</td>
                     <td>{p.endDate}</td>
-                    <td className={styles.actions}>
-                      <button className={styles.btnEdit} onClick={() => { setEditing(p); setShowForm(true) }}>編集</button>
-                      <button className={styles.btnDelete} onClick={() => handleDelete(p.id)}>削除</button>
+                    <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
+                      <button className={styles.btnEdit} onClick={() => handleEdit(p)}>編集</button>
+                      <button className={styles.btnDelete} onClick={() => handleDelete(p.id, 'このケアプランを削除しますか？')}>削除</button>
                     </td>
                   </tr>
                 )
@@ -85,17 +59,9 @@ export default function CarePlanList() {
         </div>
       )}
 
-      {showForm && (
-        <div className={styles.modalOverlay} onClick={() => setShowForm(false)}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2>{editing ? 'ケアプラン編集' : 'ケアプラン追加'}</h2>
-              <button className={styles.modalClose} onClick={() => setShowForm(false)}>✕</button>
-            </div>
-            <CarePlanForm plan={editing} users={users} onSaved={handleSaved} onCancel={() => setShowForm(false)} />
-          </div>
-        </div>
-      )}
+      <Modal show={showForm} title={editing ? 'ケアプラン編集' : 'ケアプラン追加'} onClose={handleClose}>
+        <CarePlanForm plan={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
+      </Modal>
     </div>
   )
 }

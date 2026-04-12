@@ -1,0 +1,205 @@
+.page {
+  padding: 8px 0;
+}
+
+.dropZone {
+  border: 2px dashed #CBD5E1;
+  border-radius: 12px;
+  padding: 48px 24px;
+  text-align: center;
+  background: #F8FAFC;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.dropZone:hover,
+.dropZoneActive {
+  border-color: #2563EB;
+  background: #EFF6FF;
+}
+
+.dropIcon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.dropText {
+  font-size: 15px;
+  color: #475569;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.dropSubText {
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+.fileInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.preview {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.previewImg {
+  max-width: 300px;
+  max-height: 300px;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  object-fit: contain;
+}
+
+.previewInfo {
+  flex: 1;
+}
+
+.fileName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1E293B;
+  margin-bottom: 8px;
+}
+
+.startBtn {
+  background: #2563EB;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 12px;
+}
+
+.startBtn:hover {
+  background: #1D4ED8;
+}
+
+.startBtn:disabled {
+  background: #93C5FD;
+  cursor: not-allowed;
+}
+
+.resetBtn {
+  background: #F1F5F9;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 12px;
+  margin-left: 8px;
+}
+
+.resetBtn:hover {
+  background: #E2E8F0;
+}
+
+.progressSection {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.progressLabel {
+  font-size: 13px;
+  color: #64748B;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.progressBar {
+  height: 8px;
+  background: #E2E8F0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: #2563EB;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.progressStatus {
+  font-size: 12px;
+  color: #94A3B8;
+  margin-top: 6px;
+}
+
+.resultSection {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  padding: 20px 24px;
+}
+
+.resultHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.resultTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+.copyBtn {
+  background: #F1F5F9;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.copyBtn:hover {
+  background: #E2E8F0;
+}
+
+.copyBtnSuccess {
+  background: #DCFCE7;
+  color: #16A34A;
+  border-color: #BBF7D0;
+}
+
+.resultText {
+  width: 100%;
+  min-height: 200px;
+  padding: 12px;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.7;
+  resize: vertical;
+  font-family: inherit;
+  background: #F8FAFC;
+}

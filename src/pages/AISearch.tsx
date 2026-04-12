@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { ClaudeMessage } from '../utils/claudeApi'
 import { askClaude } from '../utils/claudeApi'
-import { getUsers, getProgressNotes, getCarePlans } from '../utils/storage'
+import { buildContext } from '../utils/aiContext'
 import styles from './AISearch.module.css'
 
 const SUGGESTIONS = [
@@ -15,28 +15,6 @@ export default function AISearch() {
   const [query, setQuery] = useState('')
   const [messages, setMessages] = useState<ClaudeMessage[]>([])
   const [loading, setLoading] = useState(false)
-
-  function buildContext(): string {
-    const users = getUsers()
-    const notes = getProgressNotes().slice(0, 20)
-    const plans = getCarePlans().slice(0, 10)
-
-    const userSummary = users.map((u) => `・${u.name}（${u.careLevel}、担当: ${u.staffName}）`).join('\n')
-    const noteSummary = notes
-      .map((n) => {
-        const user = users.find((u) => u.id === n.userId)
-        return `[${n.date}] ${user?.name ?? '不明'}: ${n.content}`
-      })
-      .join('\n')
-    const planSummary = plans
-      .map((p) => {
-        const user = users.find((u) => u.id === p.userId)
-        return `${user?.name ?? '不明'}: 長期目標「${p.longTermGoal}」短期目標「${p.shortTermGoal}」`
-      })
-      .join('\n')
-
-    return `【登録利用者】\n${userSummary}\n\n【最近の支援経過】\n${noteSummary}\n\n【ケアプラン】\n${planSummary}`
-  }
 
   async function handleSend() {
     const text = query.trim()
@@ -56,6 +34,9 @@ export default function AISearch() {
     try {
       const reply = await askClaude(newMessages)
       setMessages([...newMessages, { role: 'assistant', content: reply }])
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'エラーが発生しました'
+      setMessages([...newMessages, { role: 'assistant', content: `⚠️ ${msg}` }])
     } finally {
       setLoading(false)
     }

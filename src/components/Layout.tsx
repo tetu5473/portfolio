@@ -1,6 +1,8 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Header from './Header'
+import FloatingAI from './FloatingAI'
+import TextImprove from './TextImprove'
 import styles from './Layout.module.css'
 
 const PAGE_TITLES: Record<string, string> = {
@@ -12,6 +14,8 @@ const PAGE_TITLES: Record<string, string> = {
   '/monitoring': 'モニタリング',
   '/meetings': '担当者会議',
   '/search': 'AI検索',
+  '/ocr': '画像読み取り（OCR）',
+  '/email': 'メール送信',
 }
 
 function getTitle(pathname: string): string {
@@ -35,6 +39,8 @@ export default function Layout() {
           <Outlet />
         </main>
       </div>
+      <FloatingAI />
+      <TextImprove />
     </div>
   )
 }
