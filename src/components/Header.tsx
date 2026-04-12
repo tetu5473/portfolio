@@ -5,27 +5,39 @@ import { fetchWeather, getWeatherIconUrl } from '../utils/weatherApi'
 import { logout } from '../utils/auth'
 import styles from './Header.module.css'
 
+/**
+ * アプリ共通ヘッダーコンポーネント
+ * - ページタイトル・現在日時・天気・ログアウトボタンを表示する
+ */
+
+/** Props の型定義 */
 interface Props {
+  /** ヘッダーに表示するページタイトル */
   title: string
 }
 
 export default function Header({ title }: Props) {
+  // 天気情報（取得前は null）
   const [weather, setWeather] = useState<WeatherData | null>(null)
+  // 現在日時（1秒ごとに更新）
   const [now, setNow] = useState(new Date())
   const navigate = useNavigate()
 
+  /** ログアウト処理: セッションを破棄してログイン画面へ遷移 */
   function handleLogout() {
     logout()
     navigate('/login')
   }
 
+  // 初回マウント時に小樽市の天気を取得
   useEffect(() => {
     fetchWeather('Otaru').then(setWeather)
   }, [])
 
+  // 1秒ごとに現在時刻を更新するタイマーを設定
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000)
-    return () => clearInterval(timer)
+    return () => clearInterval(timer) // アンマウント時にタイマーを解除
   }, [])
 
   const dateStr = now.toLocaleDateString('ja-JP', {
