@@ -3,6 +3,8 @@ import type { Meeting, User } from '../../types'
 import { getMeetings, deleteMeeting, getUsers } from '../../utils/storage'
 import { useListPage } from '../../hooks/useListPage'
 import MeetingForm from './MeetingForm'
+import Modal from '../../components/Modal'
+import UserFilterSelect from '../../components/UserFilterSelect'
 import styles from '../ListPage.module.css'
 
 const byDateDesc = (a: Meeting, b: Meeting) => b.date.localeCompare(a.date)
@@ -15,13 +17,7 @@ export default function MeetingList() {
   return (
     <div>
       <div className={styles.toolbar}>
-        <div className={styles.filterBar}>
-          <select className={styles.filterSelect} value={filterUserId} onChange={(e) => setFilterUserId(e.target.value)}>
-            <option value="">全利用者</option>
-            {users.map((u) => <option key={u.id} value={u.id}>{u.name}</option>)}
-          </select>
-          <span className={styles.count}>{filtered.length}件</span>
-        </div>
+        <UserFilterSelect users={users} value={filterUserId} onChange={setFilterUserId} count={filtered.length} />
         <button className={styles.btnPrimary} onClick={handleNew}>+ 会議追加</button>
       </div>
 
@@ -61,17 +57,9 @@ export default function MeetingList() {
         </div>
       )}
 
-      {showForm && (
-        <div className={styles.modalOverlay} onClick={handleClose}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2>{editing ? '担当者会議編集' : '担当者会議追加'}</h2>
-              <button className={styles.modalClose} onClick={handleClose}>✕</button>
-            </div>
-            <MeetingForm meeting={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
-          </div>
-        </div>
-      )}
+      <Modal show={showForm} title={editing ? '担当者会議編集' : '担当者会議追加'} onClose={handleClose}>
+        <MeetingForm meeting={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
+      </Modal>
     </div>
   )
 }

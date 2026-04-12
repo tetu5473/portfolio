@@ -3,6 +3,8 @@ import type { Monitoring, User } from '../../types'
 import { getMonitoringList, deleteMonitoring, getUsers } from '../../utils/storage'
 import { useListPage } from '../../hooks/useListPage'
 import MonitoringForm from './MonitoringForm'
+import Modal from '../../components/Modal'
+import UserFilterSelect from '../../components/UserFilterSelect'
 import styles from '../ListPage.module.css'
 
 const byDateDesc = (a: Monitoring, b: Monitoring) => b.date.localeCompare(a.date)
@@ -15,13 +17,7 @@ export default function MonitoringList() {
   return (
     <div>
       <div className={styles.toolbar}>
-        <div className={styles.filterBar}>
-          <select className={styles.filterSelect} value={filterUserId} onChange={(e) => setFilterUserId(e.target.value)}>
-            <option value="">全利用者</option>
-            {users.map((u) => <option key={u.id} value={u.id}>{u.name}</option>)}
-          </select>
-          <span className={styles.count}>{filtered.length}件</span>
-        </div>
+        <UserFilterSelect users={users} value={filterUserId} onChange={setFilterUserId} count={filtered.length} />
         <button className={styles.btnPrimary} onClick={handleNew}>+ モニタリング追加</button>
       </div>
 
@@ -59,17 +55,9 @@ export default function MonitoringList() {
         </div>
       )}
 
-      {showForm && (
-        <div className={styles.modalOverlay} onClick={handleClose}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2>{editing ? 'モニタリング編集' : 'モニタリング追加'}</h2>
-              <button className={styles.modalClose} onClick={handleClose}>✕</button>
-            </div>
-            <MonitoringForm monitoring={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
-          </div>
-        </div>
-      )}
+      <Modal show={showForm} title={editing ? 'モニタリング編集' : 'モニタリング追加'} onClose={handleClose}>
+        <MonitoringForm monitoring={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
+      </Modal>
     </div>
   )
 }

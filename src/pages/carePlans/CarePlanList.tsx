@@ -5,6 +5,8 @@ import { exportCarePlans } from '../../utils/excelUtils'
 import { exportCarePlansPDF } from '../../utils/pdfUtils'
 import { useListPage } from '../../hooks/useListPage'
 import CarePlanForm from './CarePlanForm'
+import Modal from '../../components/Modal'
+import UserFilterSelect from '../../components/UserFilterSelect'
 import styles from '../ListPage.module.css'
 
 export default function CarePlanList() {
@@ -15,13 +17,7 @@ export default function CarePlanList() {
   return (
     <div>
       <div className={styles.toolbar}>
-        <div className={styles.filterBar}>
-          <select className={styles.filterSelect} value={filterUserId} onChange={(e) => setFilterUserId(e.target.value)}>
-            <option value="">全利用者</option>
-            {users.map((u) => <option key={u.id} value={u.id}>{u.name}</option>)}
-          </select>
-          <span className={styles.count}>{filtered.length}件</span>
-        </div>
+        <UserFilterSelect users={users} value={filterUserId} onChange={setFilterUserId} count={filtered.length} />
         <div style={{ display: 'flex', gap: '8px' }}>
           <button className={styles.btnEdit} onClick={() => exportCarePlans()}>Excelエクスポート</button>
           <button className={styles.btnEdit} onClick={() => exportCarePlansPDF(filtered, users)}>PDFエクスポート</button>
@@ -63,17 +59,9 @@ export default function CarePlanList() {
         </div>
       )}
 
-      {showForm && (
-        <div className={styles.modalOverlay} onClick={handleClose}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2>{editing ? 'ケアプラン編集' : 'ケアプラン追加'}</h2>
-              <button className={styles.modalClose} onClick={handleClose}>✕</button>
-            </div>
-            <CarePlanForm plan={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
-          </div>
-        </div>
-      )}
+      <Modal show={showForm} title={editing ? 'ケアプラン編集' : 'ケアプラン追加'} onClose={handleClose}>
+        <CarePlanForm plan={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
+      </Modal>
     </div>
   )
 }

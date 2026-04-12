@@ -5,6 +5,8 @@ import { exportProgressNotes } from '../../utils/excelUtils'
 import { exportProgressNotesPDF } from '../../utils/pdfUtils'
 import { useListPage } from '../../hooks/useListPage'
 import ProgressNoteForm from './ProgressNoteForm'
+import Modal from '../../components/Modal'
+import UserFilterSelect from '../../components/UserFilterSelect'
 import styles from '../ListPage.module.css'
 
 const byDateDesc = (a: ProgressNote, b: ProgressNote) => b.date.localeCompare(a.date)
@@ -17,13 +19,7 @@ export default function ProgressNoteList() {
   return (
     <div>
       <div className={styles.toolbar}>
-        <div className={styles.filterBar}>
-          <select className={styles.filterSelect} value={filterUserId} onChange={(e) => setFilterUserId(e.target.value)}>
-            <option value="">全利用者</option>
-            {users.map((u) => <option key={u.id} value={u.id}>{u.name}</option>)}
-          </select>
-          <span className={styles.count}>{filtered.length}件</span>
-        </div>
+        <UserFilterSelect users={users} value={filterUserId} onChange={setFilterUserId} count={filtered.length} />
         <div style={{ display: 'flex', gap: '8px' }}>
           <button className={styles.btnEdit} onClick={() => exportProgressNotes()}>Excelエクスポート</button>
           <button className={styles.btnEdit} onClick={() => exportProgressNotesPDF(filtered, users)}>PDFエクスポート</button>
@@ -60,17 +56,9 @@ export default function ProgressNoteList() {
         </div>
       )}
 
-      {showForm && (
-        <div className={styles.modalOverlay} onClick={handleClose}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2>{editing ? '支援経過編集' : '支援経過追加'}</h2>
-              <button className={styles.modalClose} onClick={handleClose}>✕</button>
-            </div>
-            <ProgressNoteForm note={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
-          </div>
-        </div>
-      )}
+      <Modal show={showForm} title={editing ? '支援経過編集' : '支援経過追加'} onClose={handleClose}>
+        <ProgressNoteForm note={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
+      </Modal>
     </div>
   )
 }

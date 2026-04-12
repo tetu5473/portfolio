@@ -1,14 +1,19 @@
 import { useRef, type ChangeEvent } from 'react'
+// useNavigate: 別のページへ移動するための機能
 import { useNavigate } from 'react-router-dom'
 import type { User } from '../../types'
 import { getUsers, deleteUser } from '../../utils/storage'
 import { exportUsers, importUsers } from '../../utils/excelUtils'
+// useListPage: 一覧表示に必要な状態管理・操作をまとめたカスタムフック
 import { useListPage } from '../../hooks/useListPage'
 import UserForm from './UserForm'
+import Modal from '../../components/Modal'
 import styles from '../ListPage.module.css'
 
 export default function UserList() {
+  // navigate: ページ移動に使う関数
   const navigate = useNavigate()
+  // useListPageから一覧表示・編集・削除に必要な変数と関数を取り出す
   const { list: users, editing, showForm, handleSaved, handleEdit, handleNew, handleDelete, handleClose } =
     useListPage<User>({ fetchAll: getUsers, deleteItem: deleteUser })
   const importRef = useRef<HTMLInputElement>(null)
@@ -47,6 +52,7 @@ export default function UserList() {
             </thead>
             <tbody>
               {users.map((u) => (
+                // 行をクリックしたら /users/利用者ID のプロフィールページへ移動する
                 <tr key={u.id} style={{ cursor: 'pointer' }} onClick={() => navigate(`/users/${u.id}`)}>
                   <td className={styles.bold}>{u.name}</td>
                   <td>{u.nameKana}</td>
@@ -55,7 +61,9 @@ export default function UserList() {
                   <td><span className={styles.badge}>{u.careLevel}</span></td>
                   <td>{u.staffName}</td>
                   <td>{u.phone}</td>
+                  {/* e.stopPropagation(): 操作列のクリックが行全体のクリックに伝わらないようにする */}
                   <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
+                    {/* 編集ボタンは引き続き編集モーダルを開く */}
                     <button className={styles.btnEdit} onClick={() => handleEdit(u)}>編集</button>
                     <button className={styles.btnDelete} onClick={() => handleDelete(u.id, 'この利用者を削除しますか？')}>削除</button>
                   </td>
@@ -66,17 +74,9 @@ export default function UserList() {
         </div>
       )}
 
-      {showForm && (
-        <div className={styles.modalOverlay} onClick={handleClose}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2>{editing ? '利用者編集' : '利用者追加'}</h2>
-              <button className={styles.modalClose} onClick={handleClose}>✕</button>
-            </div>
-            <UserForm user={editing} onSaved={handleSaved} onCancel={handleClose} />
-          </div>
-        </div>
-      )}
+      <Modal show={showForm} title={editing ? '利用者編集' : '利用者追加'} onClose={handleClose}>
+        <UserForm user={editing} onSaved={handleSaved} onCancel={handleClose} />
+      </Modal>
     </div>
   )
 }

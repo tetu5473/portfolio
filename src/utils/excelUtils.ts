@@ -1,12 +1,10 @@
 import * as XLSX from 'xlsx'
-import type { User, CarePlan, ProgressNote } from '../types'
+import type { User } from '../types'
 import {
   getUsers,
   getCarePlans,
   getProgressNotes,
   saveUser,
-  saveCarePlan,
-  saveProgressNote,
 } from './storage'
 import { generateId } from './idUtils'
 
@@ -108,56 +106,6 @@ export function importUsers(file: File): Promise<{ count: number; errors: string
         createdAt: r['登録日時'] || new Date().toISOString(),
       }
       saveUser(user)
-      count++
-    }
-    return { count, errors }
-  })
-}
-
-export function importCarePlans(file: File): Promise<{ count: number; errors: string[] }> {
-  return readSheet(file).then(({ data, errors }) => {
-    let count = 0
-    for (const row of data) {
-      const r = row as Record<string, string>
-      if (!r['利用者ID']) {
-        errors.push(`利用者IDが空の行をスキップしました`)
-        continue
-      }
-      const plan: CarePlan = {
-        id: r['ID'] || generateId(),
-        userId: r['利用者ID'],
-        longTermGoal: r['長期目標'] ?? '',
-        shortTermGoal: r['短期目標'] ?? '',
-        services: r['サービス内容'] ?? '',
-        startDate: r['開始日'] ?? '',
-        endDate: r['終了日'] ?? '',
-        createdAt: r['登録日時'] || new Date().toISOString(),
-      }
-      saveCarePlan(plan)
-      count++
-    }
-    return { count, errors }
-  })
-}
-
-export function importProgressNotes(file: File): Promise<{ count: number; errors: string[] }> {
-  return readSheet(file).then(({ data, errors }) => {
-    let count = 0
-    for (const row of data) {
-      const r = row as Record<string, string>
-      if (!r['利用者ID']) {
-        errors.push(`利用者IDが空の行をスキップしました`)
-        continue
-      }
-      const note: ProgressNote = {
-        id: r['ID'] || generateId(),
-        userId: r['利用者ID'],
-        date: r['日付'] ?? '',
-        author: r['記録者'] ?? '',
-        content: r['内容'] ?? '',
-        createdAt: r['登録日時'] || new Date().toISOString(),
-      }
-      saveProgressNote(note)
       count++
     }
     return { count, errors }
