@@ -15,16 +15,20 @@ import UserFilterSelect from '../../components/UserFilterSelect'
 import styles from '../ListPage.module.css'
 
 export default function CarePlanList() {
+  // 利用者一覧: フィルター選択肢の表示と userId→氏名変換に使う
   const [users] = useState<User[]>(() => getUsers())
+  // useCrudListからフィルタ済みリスト・編集状態・各操作関数を取り出す
   const { filteredItems, editing, showForm, filterUserId, setFilterUserId, handleSave, handleEdit, handleNew, handleDelete, handleClose } =
     useCrudList<CarePlan>({ fetchAll: getCarePlans, deleteItem: deleteCarePlan })
 
   return (
     <div>
       <div className={styles.toolbar}>
+        {/* 利用者フィルター: 選択中の件数も表示する */}
         <UserFilterSelect users={users} value={filterUserId} onChange={setFilterUserId} count={filteredItems.length} />
         <div style={{ display: 'flex', gap: '8px' }}>
           <button className={styles.btnEdit} onClick={() => exportCarePlans()}>Excelエクスポート</button>
+          {/* PDFエクスポート: フィルタ後のデータを印刷対象にする */}
           <button className={styles.btnEdit} onClick={() => exportCarePlansPDF(filteredItems, users)}>PDFエクスポート</button>
           <button className={styles.btnPrimary} onClick={handleNew}>+ ケアプラン追加</button>
         </div>
@@ -42,9 +46,12 @@ export default function CarePlanList() {
               </tr>
             </thead>
             <tbody>
+              {/* filteredItems: 利用者フィルターが選択されている場合のみ絞り込んだ結果を表示する */}
               {filteredItems.map((p) => {
+                // userId から利用者名を逆引きして表示する
                 const user = users.find((u) => u.id === p.userId)
                 return (
+                  // 行クリックで編集モーダルを開く
                   <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => handleEdit(p)}>
                     <td className={styles.bold}>{user?.name ?? '—'}</td>
                     <td className={styles.preWrap}>{p.longTermGoal}</td>
@@ -52,6 +59,7 @@ export default function CarePlanList() {
                     <td className={styles.preWrap}>{p.services}</td>
                     <td>{p.startDate}</td>
                     <td>{p.endDate}</td>
+                    {/* e.stopPropagation(): 操作ボタンのクリックが行全体のクリックに伝わらないようにする */}
                     <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
                       <button className={styles.btnEdit} onClick={() => handleEdit(p)}>編集</button>
                       <button className={styles.btnDelete} onClick={() => handleDelete(p.id, 'このケアプランを削除しますか？')}>削除</button>
@@ -64,6 +72,7 @@ export default function CarePlanList() {
         </div>
       )}
 
+      {/* editing が null なら新規追加モーダル、値があれば編集モーダルとして開く */}
       <Modal show={showForm} title={editing ? 'ケアプラン編集' : 'ケアプラン追加'} onClose={handleClose}>
         <CarePlanForm plan={editing} users={users} onSaved={handleSave} onCancel={handleClose} />
       </Modal>

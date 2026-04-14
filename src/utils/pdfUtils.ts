@@ -116,6 +116,7 @@ function escapeHtml(str: string): string {
  * @param users  出力する利用者データの配列
  */
 export function exportUserListPDF(users: User[]) {
+  // 利用者データを HTML の <tr> 行に変換する。escapeHtml でXSSを防ぐ
   const rows = users.map((u) => `
     <tr>
       <td>${escapeHtml(u.name)}</td>
@@ -236,6 +237,7 @@ export function exportProgressNotesPDF(notes: ProgressNote[], users: User[]) {
  * @param users  利用者一覧（userId → 氏名の解決に使用）
  */
 export function exportCarePlansPDF(plans: CarePlan[], users: User[]) {
+  // userId から氏名を素早く引けるようにMapを作成する
   const usersMap = new Map(users.map((u) => [u.id, u.name]))
 
   const rows = plans.map((p) => `
@@ -264,6 +266,7 @@ export function exportCarePlansPDF(plans: CarePlan[], users: User[]) {
  * @param users        利用者一覧（userId → 氏名の解決に使用）
  */
 export function exportMonitoringsPDF(monitorings: Monitoring[], users: User[]) {
+  // userId から氏名を素早く引けるようにMapを作成する
   const usersMap = new Map(users.map((u) => [u.id, u.name]))
 
   const rows = monitorings.map((m) => `
