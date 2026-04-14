@@ -1,57 +1,69 @@
 /* index.css — アプリ全体のグローバルスタイル */
 /* リセット・フォント設定・基本カラー・汎用要素スタイルを定義する */
+
+/* すべての要素に border-box を適用して padding・border を width に含める */
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
+/* :root — CSS変数とフォント・カラーのデフォルト値を定義する */
 :root {
   font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, 'Noto Sans JP', Inter, sans-serif;
+  /* 日本語フォントを優先して指定し、OSにない場合は Inter にフォールバックする */
   font-size: 16px;
   line-height: 1.5;
   font-weight: 400;
-  color-scheme: light;
-  color: #1E293B;
-  background-color: #F8FAFC;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color-scheme: light;   /* ライトモードのみを使用することをブラウザに伝える */
+  color: #1E293B;        /* アプリ全体のデフォルトテキストカラー */
+  background-color: #F8FAFC; /* アプリ全体のデフォルト背景色 */
+  -webkit-font-smoothing: antialiased;      /* Safari/Chrome でフォントをなめらかにレンダリングする */
+  -moz-osx-font-smoothing: grayscale;       /* Firefox でフォントをなめらかにレンダリングする */
 }
 
+/* body — マージンリセットと最小高さの設定 */
 body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
+  margin: 0;             /* ブラウザデフォルトのマージンをリセットする */
+  min-width: 320px;      /* スマホ最小幅に合わせてレイアウト崩れを防ぐ */
+  min-height: 100vh;     /* 画面全体の高さを確保する */
 }
 
+/* #root — Reactアプリのマウントポイント */
 #root {
-  min-height: 100vh;
+  min-height: 100vh;     /* アプリが短い場合も画面全体を使う */
 }
 
+/* a — リンクのデフォルトスタイル */
 a {
-  color: #2563EB;
-  text-decoration: none;
+  color: #2563EB;        /* ブランドカラーの青をリンク色に使う */
+  text-decoration: none; /* デフォルトの下線を消す（ホバー時のみ表示する） */
 }
 
+/* ホバー時に下線を表示してリンクであることを伝える */
 a:hover {
   text-decoration: underline;
 }
 
+/* button — フォントの引き継ぎとカーソルの設定 */
 button {
-  font-family: inherit;
+  font-family: inherit;  /* ボタンはブラウザデフォルトで異なるフォントになるため引き継ぐ */
   cursor: pointer;
 }
 
+/* フォーム要素もアプリのフォントを引き継ぐ */
 input,
 select,
 textarea {
   font-family: inherit;
 }
 
+/* 見出し — マージンリセットと太字・ダークカラーの設定 */
 h1, h2, h3, h4, h5, h6 {
-  margin: 0;
+  margin: 0;             /* ブラウザデフォルトのマージンをリセットする */
   font-weight: 700;
   color: #1E293B;
 }
 
+/* p — マージンリセット */
 p {
   margin: 0;
 }

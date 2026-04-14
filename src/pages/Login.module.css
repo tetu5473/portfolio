@@ -1,78 +1,91 @@
 /* Login.module.css — ログインページのスタイル */
 /* 画面中央にカードを配置するグラジェント背景レイアウト */
+
+/* .page: 画面全体を覆うグラジェント背景。ログインカードを中央に配置する */
 .page {
-  min-height: 100vh;
+  min-height: 100vh;     /* 画面全体の高さを使う */
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  justify-content: center; /* カードを縦横の中央に配置する */
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); /* 左上から右下への青系グラジェント */
 }
 
+/* .card: ログインフォームを囲むホワイトカード */
 .card {
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12); /* 青みがかった影でブランド感を出す */
   padding: 48px 40px;
   width: 100%;
-  max-width: 400px;
+  max-width: 400px;      /* カードが広がりすぎないよう最大幅を制限する */
 }
 
+/* .logo: カード上部のロゴエリア（アイコン + アプリ名） */
 .logo {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 32px;   /* フォームとの余白 */
 }
 
+/* .logoIcon: ロゴアイコン絵文字（ブロック要素にして中央寄せを適用する） */
 .logoIcon {
   font-size: 36px;
-  display: block;
+  display: block;        /* inline だと text-align: center が効かないためブロックにする */
   margin-bottom: 8px;
 }
 
+/* .logoText: アプリ名テキスト */
 .logoText {
   font-size: 22px;
   font-weight: 800;
   color: #1E293B;
 }
 
+/* .subtitle: アプリ名の下に表示するキャッチコピー（例: 「介護ケア管理システム」） */
 .subtitle {
   font-size: 13px;
   color: #64748B;
   margin-top: 4px;
 }
 
+/* .form: 入力フィールドとボタンを縦に積むフォームコンテナ */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 20px;             /* フィールド間の余白 */
 }
 
+/* .field: ラベル＋入力欄をまとめた1フィールド単位のコンテナ */
 .field {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
+/* .label: 入力欄の上に表示するフィールド名テキスト */
 .label {
   font-size: 13px;
   font-weight: 600;
   color: #374151;
 }
 
+/* .input: テキスト入力フィールド（メールアドレス・パスワード共通） */
 .input {
   padding: 10px 14px;
   border: 1px solid #E2E8F0;
   border-radius: 8px;
   font-size: 14px;
   color: #1E293B;
-  outline: none;
+  outline: none;         /* デフォルトのアウトラインを消して独自スタイルを使う */
   transition: border-color 0.15s;
 }
 
+/* フォーカス時は青枠 + 薄い青のグロー効果でアクティブを示す */
 .input:focus {
   border-color: #2563EB;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+/* .error: 認証失敗時に表示する赤い警告メッセージ */
 .error {
   background: #FEF2F2;
   border: 1px solid #FECACA;
@@ -82,6 +95,7 @@
   color: #DC2626;
 }
 
+/* .submitBtn: 「ログイン」ボタン */
 .submitBtn {
   background: #2563EB;
   color: #fff;
@@ -92,13 +106,15 @@
   font-weight: 700;
   cursor: pointer;
   transition: background 0.15s;
-  margin-top: 4px;
+  margin-top: 4px;       /* フォームフィールドとの追加余白 */
 }
 
+/* ホバー時は少し暗い青にして押せることを伝える */
 .submitBtn:hover {
   background: #1D4ED8;
 }
 
+/* 送信中はボタンを薄い青にして連打できないようにする */
 .submitBtn:disabled {
   background: #93C5FD;
   cursor: not-allowed;

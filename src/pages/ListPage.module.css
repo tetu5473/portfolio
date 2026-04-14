@@ -1,76 +1,89 @@
 /* ListPage.module.css — 一覧ページ（利用者・ケアプラン等）共通スタイル */
 /* テーブル・ツールバー・モーダル・フィルターバーを含む */
+
+/* .toolbar: 一覧ページ上部のフィルターとボタンを並べるバー */
 .toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* 左にフィルター、右にボタン群を配置する */
   margin-bottom: 16px;
 }
 
+/* .count: フィルター後の件数表示テキスト（例: 5件） */
 .count {
   font-size: 13px;
-  color: #64748B;
+  color: #64748B;        /* 補助情報なので薄いグレーにする */
 }
 
+/* .tableWrap: テーブルをカード風に見せるラッパー。横スクロールも担う */
 .tableWrap {
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
-  overflow: auto;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07); /* 軽い影でカード感を出す */
+  overflow: auto;        /* 列が多いとき横スクロールを有効にする */
 }
 
+/* .table: データ一覧テーブル本体 */
 .table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse; /* セル間の隙間をなくす */
   font-size: 13px;
 }
 
+/* .table th: テーブルヘッダーセル */
 .table th {
   text-align: left;
   padding: 10px 14px;
-  background: #F8FAFC;
+  background: #F8FAFC;   /* 薄いグレーでヘッダーとデータ行を区別する */
   color: #64748B;
   font-weight: 600;
-  border-bottom: 1px solid #E2E8F0;
-  white-space: nowrap;
+  border-bottom: 1px solid #E2E8F0; /* ヘッダーとデータ行の区切り線 */
+  white-space: nowrap;   /* 列名が折り返して高さが変わるのを防ぐ */
 }
 
+/* .table td: テーブルデータセル */
 .table td {
   padding: 12px 14px;
-  border-bottom: 1px solid #F1F5F9;
+  border-bottom: 1px solid #F1F5F9; /* 行間の薄い区切り線 */
   color: #334155;
-  vertical-align: middle;
+  vertical-align: middle; /* セル内コンテンツを縦中央揃えにする */
 }
 
+/* 最終行の下罫線を消してテーブル外枠と重ならないようにする */
 .table tr:last-child td {
   border-bottom: none;
 }
 
+/* 行ホバー時に背景を薄いグレーにして選択行を視覚的に示す */
 .table tr:hover td {
   background: #F8FAFC;
 }
 
+/* .bold: 利用者名など強調表示したいセルに付けるクラス */
 .bold {
   font-weight: 600;
-  color: #1E293B !important;
+  color: #1E293B !important; /* td の color より優先するため !important を使う */
 }
 
+/* .badge: 介護度などを示すラベル型バッジ（青の丸角ピル） */
 .badge {
   display: inline-block;
-  background: #EFF6FF;
+  background: #EFF6FF;   /* 薄い青背景 */
   color: #2563EB;
   font-size: 11px;
   font-weight: 600;
   padding: 3px 10px;
-  border-radius: 10px;
+  border-radius: 10px;   /* ピル型の丸みをつける */
 }
 
+/* .actions: 「編集」「削除」ボタンを横並びにするセル内コンテナ */
 .actions {
   display: flex;
   gap: 8px;
-  white-space: nowrap;
+  white-space: nowrap;   /* ボタンが折り返さないようにする */
 }
 
+/* .btnPrimary: 「+ 記録追加」などのメインアクションボタン（青） */
 .btnPrimary {
   background: #2563EB;
   color: #fff;
@@ -83,10 +96,12 @@
   transition: background 0.15s;
 }
 
+/* ホバー時は少し暗い青にする */
 .btnPrimary:hover {
   background: #1D4ED8;
 }
 
+/* .btnEdit: 「編集」「Excelエクスポート」などのサブアクションボタン（薄グレー） */
 .btnEdit {
   background: #F1F5F9;
   color: #334155;
@@ -99,10 +114,12 @@
   transition: background 0.15s;
 }
 
+/* ホバー時は少し濃いグレーにする */
 .btnEdit:hover {
   background: #E2E8F0;
 }
 
+/* .btnDelete: 「削除」ボタン（薄い赤で危険アクションであることを示す） */
 .btnDelete {
   background: #FEF2F2;
   color: #DC2626;
@@ -115,50 +132,57 @@
   transition: background 0.15s;
 }
 
+/* ホバー時は赤みを強めて削除操作への注意を促す */
 .btnDelete:hover {
   background: #FEE2E2;
 }
 
+/* .empty: データが0件のときに表示するプレースホルダーメッセージ */
 .empty {
   background: #fff;
   border-radius: 8px;
   padding: 48px;
   text-align: center;
-  color: #94A3B8;
+  color: #94A3B8;        /* 薄いグレーで「空」であることを穏やかに示す */
   font-size: 14px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.07);
 }
 
-/* Modal */
+/* ── モーダル ── */
+
+/* .modalOverlay: モーダル背景の半透明オーバーレイ */
 .modalOverlay {
   position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
+  inset: 0;              /* 上下左右すべてを0にして画面全体を覆う */
+  background: rgba(0,0,0,0.4); /* 半透明の黒でコンテンツを暗くする */
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 24px;
+  justify-content: center; /* モーダルを画面中央に配置する */
+  z-index: 1000;         /* 全コンテンツの最前面に表示する */
+  padding: 24px;         /* 小さい画面でモーダルが端に張り付かないようにする */
 }
 
+/* .modal: モーダルのカード本体 */
 .modal {
   background: #fff;
   border-radius: 10px;
   width: 100%;
-  max-width: 700px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  max-width: 700px;      /* 大きい画面でも横幅が広がりすぎないようにする */
+  max-height: 90vh;      /* 画面高さの 90% を超えないようにして上下にはみ出させない */
+  overflow-y: auto;      /* コンテンツが多い場合は縦スクロールを有効にする */
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2); /* 深い影でオーバーレイ上に浮いて見せる */
 }
 
+/* .modalHeader: モーダルのタイトルバー（タイトルと閉じるボタン） */
 .modalHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* タイトルを左、閉じるボタンを右に配置する */
   padding: 20px 24px;
-  border-bottom: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0; /* ヘッダーとフォーム本体の区切り線 */
 }
 
+/* .modalHeader h2: モーダルタイトルテキスト */
 .modalHeader h2 {
   font-size: 16px;
   font-weight: 700;
@@ -166,22 +190,26 @@
   margin: 0;
 }
 
+/* .modalClose: モーダルを閉じる「×」ボタン */
 .modalClose {
   background: none;
   border: none;
   font-size: 18px;
   cursor: pointer;
-  color: #94A3B8;
+  color: #94A3B8;        /* 薄いグレーで目立たないが押せることは分かる */
   padding: 4px 8px;
   border-radius: 4px;
 }
 
+/* ホバー時は背景をグレーにしてボタン感を出す */
 .modalClose:hover {
   background: #F1F5F9;
   color: #334155;
 }
 
-/* Filter bar */
+/* ── フィルターバー ── */
+
+/* .filterBar: 利用者フィルターなどを配置する横並びコンテナ */
 .filterBar {
   display: flex;
   gap: 12px;
@@ -189,6 +217,7 @@
   align-items: center;
 }
 
+/* .filterSelect: フィルター用のセレクトボックス */
 .filterSelect {
   padding: 7px 12px;
   border: 1px solid #E2E8F0;
@@ -199,9 +228,10 @@
   cursor: pointer;
 }
 
+/* .preWrap: セル内テキストを折り返して全内容を表示するクラス（支援経過の内容等） */
 .preWrap {
-  white-space: pre-wrap;
-  word-break: break-all;
-  max-width: 300px;
+  white-space: pre-wrap; /* 改行コードを改行として表示しつつ長い行は折り返す */
+  word-break: break-all; /* 日本語など単語境界のない文字列も折り返す */
+  max-width: 300px;      /* 長いテキストがセルを極端に広げないよう最大幅を制限する */
   font-size: 12px;
 }

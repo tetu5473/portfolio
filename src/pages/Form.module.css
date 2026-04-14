@@ -1,68 +1,79 @@
 /* Form.module.css — 各種フォーム（利用者・ケアプラン・支援経過等）共通スタイル */
 /* .voiceBtn: テキストエリア右下に固定表示されるマイクボタン（音声入力用） */
+
+/* .form: フォーム全体のコンテナ。フィールドを縦に積む */
 .form {
   padding: 24px;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  flex-direction: column; /* フィールドを上から下へ縦に並べる */
+  gap: 16px;             /* フィールド間の余白 */
 }
 
+/* .grid2: 2カラムグリッドレイアウト（日付・利用者など並べて表示したいフィールドに使う） */
 .grid2 {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* 等幅2列に分割する */
   gap: 16px;
 }
 
+/* .field: ラベル＋入力要素をまとめた1フィールド単位のコンテナ */
 .field {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* ラベルを上、入力欄を下に配置する */
   gap: 6px;
 }
 
+/* .label: 入力欄の上に表示するフィールド名テキスト */
 .label {
   font-size: 12px;
   font-weight: 600;
-  color: #475569;
+  color: #475569;        /* 黒より薄くしてラベルと入力値を視覚的に区別する */
 }
 
+/* .required: 必須フィールドに付ける赤い「*」マーク */
 .required {
-  color: #DC2626;
+  color: #DC2626;        /* 注意を促す赤色 */
 }
 
+/* .input / .select / .textarea: 共通の入力フィールドスタイル */
 .input,
 .select,
 .textarea {
   padding: 8px 12px;
-  border: 1px solid #CBD5E1;
+  border: 1px solid #CBD5E1; /* デフォルトはグレー枠線 */
   border-radius: 6px;
   font-size: 14px;
   color: #1E293B;
   background: #fff;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s; /* フォーカス時の枠線変化をアニメーションする */
+  font-family: inherit;  /* アプリ全体のフォントを引き継ぐ */
 }
 
+/* フォーカス時は青枠 + 薄い青のグロー効果でアクティブであることを示す */
 .input:focus,
 .select:focus,
 .textarea:focus {
   outline: none;
   border-color: #2563EB;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); /* 外側に薄い青の光彩を表示する */
 }
 
+/* .textarea: テキストエリアは縦方向のリサイズのみ許可する */
 .textarea {
-  resize: vertical;
-  min-height: 80px;
+  resize: vertical;      /* 横方向リサイズは禁止してレイアウト崩れを防ぐ */
+  min-height: 80px;      /* テキストエリアの最低高さ */
 }
 
+/* .formActions: 「キャンセル」「保存」ボタンを並べるフッターエリア */
 .formActions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; /* ボタンを右端に寄せる */
   gap: 12px;
   padding-top: 8px;
-  border-top: 1px solid #F1F5F9;
+  border-top: 1px solid #F1F5F9; /* フォーム本体との区切り線 */
 }
 
+/* .btnPrimary: 「保存」などのメインアクションボタン（青） */
 .btnPrimary {
   background: #2563EB;
   color: #fff;
@@ -75,10 +86,12 @@
   transition: background 0.15s;
 }
 
+/* ホバー時は少し暗い青にして押せることを伝える */
 .btnPrimary:hover {
   background: #1D4ED8;
 }
 
+/* .btnSecondary: 「キャンセル」などのサブアクションボタン（白） */
 .btnSecondary {
   background: #fff;
   color: #64748B;
@@ -91,43 +104,49 @@
   transition: background 0.15s;
 }
 
+/* ホバー時は薄いグレーで反応を示す */
 .btnSecondary:hover {
   background: #F8FAFC;
 }
 
+/* .textareaWrap: テキストエリアの右下にマイクボタンを重ねて配置するためのラッパー */
 .textareaWrap {
-  position: relative;
+  position: relative;    /* 子要素の .voiceBtn を position: absolute で配置する基準にする */
   display: flex;
   flex-direction: column;
 }
 
+/* .voiceBtn: テキストエリアの右下隅に絶対配置されるマイクボタン */
 .voiceBtn {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
+  position: absolute;    /* .textareaWrap を基準に配置する */
+  bottom: 8px;           /* テキストエリアの下端から 8px 内側 */
+  right: 8px;            /* テキストエリアの右端から 8px 内側 */
   width: 30px;
   height: 30px;
-  border-radius: 50%;
+  border-radius: 50%;    /* 正円にする */
   border: none;
   cursor: pointer;
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #EFF6FF;
+  background: #EFF6FF;   /* 薄い青でマイクボタンを目立たせる */
   color: #2563EB;
   transition: background 0.15s;
-  z-index: 1;
+  z-index: 1;            /* テキストエリアの上に重ねて表示する */
 }
 
+/* ホバー時は少し濃い青背景にする */
 .voiceBtn:hover { background: #DBEAFE; }
 
+/* .voiceBtnActive: 音声入力中（マイクが開いている）ときの状態 */
 .voiceBtnActive {
-  background: #FEE2E2;
+  background: #FEE2E2;   /* 赤背景に変えて「録音中」であることを示す */
   color: #DC2626;
-  animation: pulse 1s infinite;
+  animation: pulse 1s infinite; /* 点滅パルスで録音中であることを強調する */
 }
 
+/* pulse: 録音中に 1.15 倍まで拡大・縮小を繰り返すアニメーション */
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.15); }

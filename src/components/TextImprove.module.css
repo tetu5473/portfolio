@@ -1,25 +1,29 @@
 /* TextImprove.module.css — テキスト選択時に表示されるAI改善パネルのスタイル */
 /* .panel: テキスト選択位置に追従してフローティング表示される小型パネル */
+
+/* .panel: テキストを選択した直後に選択範囲の上に表示されるツールチップ型パネル */
 .panel {
-  position: fixed;
-  z-index: 2000;
+  position: fixed;       /* ページスクロールに関係なく画面座標で位置を固定する */
+  z-index: 2000;         /* モーダル（1000）やFAB（1000）より手前に表示する */
   display: flex;
   align-items: center;
-  gap: 4px;
-  background: #1E293B;
+  gap: 4px;              /* ボタンと閉じる「×」の間隔 */
+  background: #1E293B;   /* ダーク背景でテキストとの対比を強くして視認性を高める */
   border-radius: 8px;
   padding: 4px 6px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-  animation: fadeIn 0.12s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25); /* パネルが浮いているように見える影 */
+  animation: fadeIn 0.12s ease; /* 表示時に下からフェードインしてスムーズに出現させる */
 }
 
+/* fadeIn: パネルが出現するときの軽いスライドアップアニメーション */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(4px); }  /* 少し下から始まる */
+  to   { opacity: 1; transform: translateY(0); }    /* 本来の位置に収まる */
 }
 
+/* .btn: 「AIで改善」などの操作ボタン */
 .btn {
-  background: #2563EB;
+  background: #2563EB;   /* ブランドカラーの青でメインアクションを示す */
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -27,20 +31,25 @@
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  white-space: nowrap;
+  white-space: nowrap;   /* ボタンテキストが折り返さないようにする */
   transition: background 0.15s;
 }
 
+/* ホバー時は少し暗い青にして押せることを伝える */
 .btn:hover:not(:disabled) { background: #1D4ED8; }
+
+/* AI処理中はボタンを半透明にして連打できないようにする */
 .btn:disabled { opacity: 0.6; cursor: default; }
 
+/* .dismiss: パネルを閉じる「×」ボタン（小さく目立たないようにする） */
 .dismiss {
-  background: none;
+  background: none;      /* 背景なしで「×」テキストだけを表示する */
   border: none;
-  color: #94A3B8;
+  color: #94A3B8;        /* 薄いグレーで存在感を抑える */
   cursor: pointer;
   font-size: 11px;
   padding: 2px 4px;
   line-height: 1;
 }
+/* ホバー時は白にして視認性を高める */
 .dismiss:hover { color: #fff; }
