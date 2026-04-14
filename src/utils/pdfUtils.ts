@@ -21,7 +21,9 @@ import type { User, CarePlan, ProgressNote, Monitoring, Meeting } from '../types
  * @param body   <body> 内に挿入する HTML 文字列
  */
 function printHTML(title: string, body: string) {
+  // 空白の新しいタブを開いてHTML印刷ページとして使用する
   const win = window.open('', '_blank')
+  // ポップアップがブロックされた場合は null になるため早期リターンで処理を中断する
   if (!win) return
 
   // @media print スタイルで画面表示用のスタイルを無効化し、印刷に最適化する
