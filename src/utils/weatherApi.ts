@@ -1,3 +1,8 @@
+/**
+ * weatherApi.ts — OpenWeatherMap API を使った天気取得ユーティリティ
+ * VITE_WEATHER_API_KEY が設定されていない場合はモックデータを返す
+ * API エラー時もモックデータにフォールバックするため、APIキーなしでも動作する
+ */
 import type { WeatherData } from '../types'
 
 const MOCK_DATA: WeatherData = {

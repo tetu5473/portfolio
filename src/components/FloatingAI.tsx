@@ -1,7 +1,13 @@
+/**
+ * FloatingAI — 画面右下に表示されるフローティング AI チャットコンポーネント
+ * ケア管理システムのデータをコンテキストとして付加し、介護に関する質問に回答する
+ */
 import { useState, useRef, useEffect } from 'react'
 import type { ClaudeMessage } from '../utils/claudeApi'
-import { askClaude } from '../utils/claudeApi'
-import { buildContext } from '../utils/aiContext'
+// generateAIResponse: AI応答を生成する関数（旧名: askClaude）
+import { generateAIResponse } from '../utils/claudeApi'
+// buildAISystemPrompt: AIへ渡すコンテキスト文字列を生成する（旧名: buildContext）
+import { buildAISystemPrompt } from '../utils/aiContext'
 import styles from './FloatingAI.module.css'
 
 export default function FloatingAI() {
@@ -18,7 +24,7 @@ export default function FloatingAI() {
   async function handleSend() {
     const text = query.trim()
     if (!text || loading) return
-    const context = buildContext()
+    const context = buildAISystemPrompt()
     const userMessage: ClaudeMessage = {
       role: 'user',
       content: `以下はケア管理システムのデータです。このデータをもとに質問に答えてください。\n\n${context}\n\n---\n\n質問: ${text}`,
@@ -28,7 +34,7 @@ export default function FloatingAI() {
     setQuery('')
     setLoading(true)
     try {
-      const reply = await askClaude(newMessages)
+      const reply = await generateAIResponse(newMessages)
       setMessages([...newMessages, { role: 'assistant', content: reply }])
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'エラーが発生しました'
@@ -67,6 +73,9 @@ export default function FloatingAI() {
               .filter((m) => m.role === 'assistant' || (m.role === 'user' && !m.content.startsWith('以下はケア管理システム')))
               .map((m, i) => {
                 const content = m.role === 'user'
+                  // 送信時にシステムコンテキスト（データ一覧）をメッセージ先頭に付加しているが、
+                  // 画面表示ではユーザーの質問部分だけを見せるために正規表現で除去する。
+                  // /s フラグにより . が改行にもマッチするため、複数行にまたがるコンテキスト部分を一括削除できる。
                   ? m.content.replace(/^以下はケア管理システム.*?---\n\n質問: /s, '')
                   : m.content
                 return (

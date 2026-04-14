@@ -1,5 +1,10 @@
+/**
+ * TextImprove — テキストエリアで文章を選択すると「AI改善」ボタンを表示するコンポーネント
+ * クリックするとAIが選択テキストを介護記録向けに改善して書き換える
+ */
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { askClaude } from '../utils/claudeApi'
+// generateAIResponse: AI応答を生成する関数（旧名: askClaude）
+import { generateAIResponse } from '../utils/claudeApi'
 import styles from './TextImprove.module.css'
 
 interface Position { x: number; y: number }
@@ -61,7 +66,7 @@ export default function TextImprove() {
     if (!targetEl || loading) return
     setLoading(true)
     try {
-      const reply = await askClaude([{
+      const reply = await generateAIResponse([{
         role: 'user',
         content: `介護ケア記録の文章として、以下のテキストをより明確・丁寧に改善してください。改善後のテキストのみを返してください（説明は不要）。\n\n元のテキスト:\n${selectedText}`,
       }])
@@ -69,7 +74,10 @@ export default function TextImprove() {
       const before = targetEl.value.substring(0, selStart)
       const after = targetEl.value.substring(selEnd)
       const newValue = before + reply + after
-      // Trigger React's synthetic event system
+      // textarea.value = newValue では React の状態管理をバイパスしてしまい、
+      // onChange が発火しないため React の state が更新されない。
+      // nativeInputValueSetter を使って React 内部の値セッターを直接呼び出し、
+      // その後 'input' イベントを手動で発火することで React の onChange を正しく動作させる。
       const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')?.set
       nativeInputValueSetter?.call(targetEl, newValue)
       targetEl.dispatchEvent(new Event('input', { bubbles: true }))

@@ -1,10 +1,16 @@
+/**
+ * useVoiceInput — マイクからの音声入力をテキストに変換するカスタムフック
+ * Web Speech API（SpeechRecognition）を使用する
+ */
 import { useState, useRef, useCallback } from 'react'
 
 interface UseVoiceInputOptions {
   onResult: (text: string) => void
 }
 
-// Extend window type for cross-browser Speech Recognition
+// Web Speech API はブラウザ間で実装が異なる。
+// Chrome は window.webkitSpeechRecognition、標準仕様では window.SpeechRecognition。
+// 両方を || で参照することで、どちらのブラウザでも動作するようにしている。
 declare global {
   interface Window {
     SpeechRecognition: new () => SpeechRecognitionInstance

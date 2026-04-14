@@ -1,11 +1,15 @@
-import { useRef, type ChangeEvent } from 'react'
+/**
+ * UserList.tsx — 利用者一覧ページ
+ * 利用者の一覧表示・追加・編集・削除・Excel インポート/エクスポートを行う
+ */
+import { useRef, useState, type ChangeEvent } from 'react'
 // useNavigate: 別のページへ移動するための機能
 import { useNavigate } from 'react-router-dom'
 import type { User } from '../../types'
 import { getUsers, deleteUser } from '../../utils/storage'
 import { exportUsers, importUsers } from '../../utils/excelUtils'
-// useListPage: 一覧表示に必要な状態管理・操作をまとめたカスタムフック
-import { useListPage } from '../../hooks/useListPage'
+// useCrudList: 一覧表示に必要な状態管理・操作をまとめたカスタムフック（旧: useListPage）
+import { useCrudList } from '../../hooks/useCrudList'
 import UserForm from './UserForm'
 import Modal from '../../components/Modal'
 import styles from '../ListPage.module.css'
@@ -13,18 +17,24 @@ import styles from '../ListPage.module.css'
 export default function UserList() {
   // navigate: ページ移動に使う関数
   const navigate = useNavigate()
-  // useListPageから一覧表示・編集・削除に必要な変数と関数を取り出す
-  const { list: users, editing, showForm, handleSaved, handleEdit, handleNew, handleDelete, handleClose } =
-    useListPage<User>({ fetchAll: getUsers, deleteItem: deleteUser })
+  // useCrudListから一覧表示・編集・削除に必要な変数と関数を取り出す
+  const { list: users, editing, showForm, handleSave, handleEdit, handleNew, handleDelete, handleClose } =
+    useCrudList<User>({ fetchAll: getUsers, deleteItem: deleteUser })
   const importRef = useRef<HTMLInputElement>(null)
+
+  // インポート結果をUIで表示するためのstate（window.alert の代わりにインライン表示）
+  const [importResult, setImportResult] = useState<{ count: number; errors: string[] } | null>(null)
 
   async function handleImport(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
     const { count, errors } = await importUsers(file)
-    handleSaved()
+    handleSave()
     if (importRef.current) importRef.current.value = ''
-    window.alert(`${count}件インポートしました。${errors.length > 0 ? '\n警告:\n' + errors.join('\n') : ''}`)
+    // alert() の代わりにstateで結果を保持し、画面内にメッセージを表示する
+    setImportResult({ count, errors })
+    // 5秒後にメッセージを自動で消す
+    setTimeout(() => setImportResult(null), 5000)
   }
 
   return (
@@ -38,6 +48,28 @@ export default function UserList() {
           <button className={styles.btnPrimary} onClick={handleNew}>+ 利用者追加</button>
         </div>
       </div>
+
+      {/* インポート結果メッセージ: window.alert の代わりにインライン表示 */}
+      {importResult && (
+        <div style={{
+          padding: '10px 16px',
+          marginBottom: '12px',
+          borderRadius: '6px',
+          fontSize: '13px',
+          background: importResult.errors.length > 0 ? '#FFFBEB' : '#F0FDF4',
+          border: `1px solid ${importResult.errors.length > 0 ? '#FCD34D' : '#86EFAC'}`,
+          color: importResult.errors.length > 0 ? '#92400E' : '#166534',
+        }}>
+          {/* 成功件数を表示 */}
+          {importResult.count}件インポートしました。
+          {/* 警告がある場合は追記 */}
+          {importResult.errors.length > 0 && (
+            <div style={{ marginTop: '4px' }}>
+              警告: {importResult.errors.join(' / ')}
+            </div>
+          )}
+        </div>
+      )}
 
       {users.length === 0 ? (
         <div className={styles.empty}>利用者が登録されていません</div>
@@ -75,7 +107,7 @@ export default function UserList() {
       )}
 
       <Modal show={showForm} title={editing ? '利用者編集' : '利用者追加'} onClose={handleClose}>
-        <UserForm user={editing} onSaved={handleSaved} onCancel={handleClose} />
+        <UserForm user={editing} onSaved={handleSave} onCancel={handleClose} />
       </Modal>
     </div>
   )

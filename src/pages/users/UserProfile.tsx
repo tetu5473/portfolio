@@ -1,3 +1,7 @@
+/**
+ * UserProfile.tsx — 利用者詳細プロフィールページ
+ * URLパラメータの id から利用者を特定し、ケアプラン・支援経過・モニタリング・担当者会議を一覧表示する
+ */
 import { useParams, useNavigate } from 'react-router-dom'
 import { getUsers, getCarePlans, getProgressNotes, getMonitoringList, getMeetings } from '../../utils/storage'
 import { exportUserProfilePDF } from '../../utils/pdfUtils'

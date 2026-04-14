@@ -1,3 +1,5 @@
+/* UserProfile.module.css — 利用者詳細プロフィールページのスタイル */
+/* プロフィールカード・ケアプラン・支援経過・モニタリング・会議を2カラムで表示する */
 .page {
   display: flex;
   flex-direction: column;

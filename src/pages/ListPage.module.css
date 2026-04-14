@@ -1,3 +1,5 @@
+/* ListPage.module.css — 一覧ページ（利用者・ケアプラン等）共通スタイル */
+/* テーブル・ツールバー・モーダル・フィルターバーを含む */
 .toolbar {
   display: flex;
   align-items: center;

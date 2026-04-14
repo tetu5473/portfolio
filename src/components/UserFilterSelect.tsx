@@ -1,3 +1,7 @@
+/**
+ * UserFilterSelect.tsx — 利用者フィルタリング用セレクトボックスコンポーネント
+ * 一覧ページで利用者を絞り込む際に使用する共通コンポーネント
+ */
 import type { User } from '../types'
 import styles from '../pages/ListPage.module.css'
 

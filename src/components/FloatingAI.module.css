@@ -1,3 +1,5 @@
+/* FloatingAI.module.css — フローティングAIチャットパネルのスタイル */
+/* .fab: 右下固定のフローティングアクションボタン */
 .fab {
   position: fixed;
   bottom: 24px;

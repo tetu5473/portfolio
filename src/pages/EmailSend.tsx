@@ -1,3 +1,7 @@
+/**
+ * EmailSend.tsx — メール送信フォームページ
+ * EmailJS が設定されている場合は実際に送信し、未設定の場合はデモモードで動作する
+ */
 import { useState, type FormEvent } from 'react'
 import { sendEmail, isEmailJSConfigured } from '../utils/emailUtils'
 import styles from './EmailSend.module.css'

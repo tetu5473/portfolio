@@ -1,8 +1,19 @@
+/**
+ * OCR — 画像ファイルをアップロードしてテキストを抽出するコンポーネント
+ * OCR.space API（OCREngine 2）を使用。日本語・英語混在に対応。
+ */
 import { useState, useRef, type DragEvent, type ChangeEvent } from 'react'
 import styles from './OCR.module.css'
 
 const OCR_SPACE_KEY = import.meta.env.VITE_OCR_SPACE_KEY as string
 
+/**
+ * OCR.space API に画像を送信してテキストを抽出する
+ * 処理の流れ:
+ * 1. FormData に画像ファイルと設定パラメータをセット
+ * 2. OCR.space の API エンドポイントに POST リクエストを送信
+ * 3. レスポンスの ParsedResults からテキストを取り出して返す
+ */
 async function extractTextWithOcrSpace(file: File): Promise<string> {
   if (!OCR_SPACE_KEY) {
     throw new Error('APIキーが設定されていません。.env の VITE_OCR_SPACE_KEY を設定してください。')
@@ -11,7 +22,7 @@ async function extractTextWithOcrSpace(file: File): Promise<string> {
   const formData = new FormData()
   formData.append('file', file)
   formData.append('language', 'jpn')
-  formData.append('OCREngine', '1')
+  formData.append('OCREngine', '2')
   formData.append('isOverlayRequired', 'false')
   formData.append('detectOrientation', 'true')
 

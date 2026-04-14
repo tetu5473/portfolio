@@ -1,61 +1,151 @@
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
+/**
+ * pdfUtils.ts — PDF出力ユーティリティ
+ *
+ * 【文字化け対策について】
+ * jsPDF は日本語フォントを標準でサポートしていないため、そのまま使うと
+ * 日本語テキストが文字化け（ローマ字変換）してしまう問題がある。
+ * この問題を解決するため、ブラウザの print 機能を利用する方式に変更した。
+ *
+ * 【仕組み】
+ * printHTML() が HTML 文字列を組み立てて新しいウィンドウで開き、
+ * window.print() を呼び出すことでブラウザの印刷ダイアログを表示する。
+ * ブラウザの印刷は OS のフォントレンダリングを使うため、日本語が正しく表示される。
+ */
 import type { User, CarePlan, ProgressNote, Monitoring, Meeting } from '../types'
 
-// jsPDF doesn't support Japanese fonts out of the box.
-// We use a workaround: render data to a canvas via html2canvas isn't available,
-// so we fall back to romaji-compatible ASCII export with Japanese labels preserved.
-// The browser's built-in print dialog handles Japanese fonts better,
-// so we provide a printable HTML approach for Japanese content.
+// ── 共通ヘルパー ──────────────────────────────────────────
 
-function createDoc(): jsPDF {
-  return new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+/**
+ * printHTML — HTML 文字列を新しいウィンドウで開いて印刷ダイアログを起動する
+ * @param title  ページタイトル（ブラウザの印刷プレビューに表示される）
+ * @param body   <body> 内に挿入する HTML 文字列
+ */
+function printHTML(title: string, body: string) {
+  const win = window.open('', '_blank')
+  if (!win) return
+
+  // @media print スタイルで画面表示用のスタイルを無効化し、印刷に最適化する
+  win.document.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>${title}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, 'Noto Sans JP', sans-serif;
+      font-size: 11pt;
+      color: #1a1a1a;
+      padding: 16mm 18mm;
+    }
+    h1 {
+      font-size: 14pt;
+      color: #2563EB;
+      border-bottom: 2px solid #2563EB;
+      padding-bottom: 6px;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 12pt;
+      color: #2563EB;
+      margin: 18px 0 8px;
+      border-left: 3px solid #2563EB;
+      padding-left: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10pt;
+      margin-bottom: 12px;
+    }
+    th {
+      background: #2563EB;
+      color: #fff;
+      padding: 6px 8px;
+      text-align: left;
+      font-weight: 600;
+    }
+    td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #E2E8F0;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #F0F5FF; }
+    .meta {
+      font-size: 9pt;
+      color: #666;
+      margin-bottom: 16px;
+    }
+    /* 印刷時: テーブルがページをまたぐとき行が分割されないようにする */
+    @media print {
+      tr { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  ${body}
+  <div class="meta" style="margin-top:20px; text-align:right;">
+    出力日時: ${new Date().toLocaleDateString('ja-JP')}　CareManager
+  </div>
+</body>
+</html>`)
+
+  win.document.close()
+  win.focus()
+  // ウィンドウの読み込みが完了してから印刷ダイアログを開く
+  win.onload = () => win.print()
 }
 
-function addHeader(doc: jsPDF, title: string) {
-  doc.setFontSize(16)
-  doc.setTextColor(37, 99, 235)
-  doc.text(title, 14, 18)
-  doc.setDrawColor(200, 200, 200)
-  doc.line(14, 22, 196, 22)
-  doc.setTextColor(50, 50, 50)
+/**
+ * escapeHtml — XSS対策: ユーザーデータをHTML文字列に埋め込む前にエスケープする
+ * < > & " ' の5文字を HTML エンティティに変換する
+ */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
 }
 
-function addFooter(doc: jsPDF) {
-  const pageCount = doc.getNumberOfPages()
-  for (let i = 1; i <= pageCount; i++) {
-    doc.setPage(i)
-    doc.setFontSize(9)
-    doc.setTextColor(150)
-    doc.text(`CareManager  ${i} / ${pageCount}`, 14, 290)
-    doc.text(new Date().toLocaleDateString('ja-JP'), 160, 290)
-  }
-}
+// ── 各ページ向けエクスポート関数 ─────────────────────────
 
+/**
+ * exportUserListPDF — 利用者一覧を印刷する
+ * @param users  出力する利用者データの配列
+ */
 export function exportUserListPDF(users: User[]) {
-  const doc = createDoc()
-  addHeader(doc, 'Riyousha Ichiran (Riyousha Kanri)')
+  const rows = users.map((u) => `
+    <tr>
+      <td>${escapeHtml(u.name)}</td>
+      <td>${escapeHtml(u.nameKana)}</td>
+      <td>${escapeHtml(u.birthDate)}</td>
+      <td>${u.gender === 'male' ? '男性' : '女性'}</td>
+      <td>${escapeHtml(u.careLevel)}</td>
+      <td>${escapeHtml(u.staffName)}</td>
+    </tr>`).join('')
 
-  autoTable(doc, {
-    startY: 26,
-    head: [['Shimei', 'Furigana', 'Seinengappi', 'Seibetsu', 'Kaigodo', 'Tantousha']],
-    body: users.map((u) => [
-      u.name,
-      u.nameKana,
-      u.birthDate,
-      u.gender === 'male' ? 'Dansei' : 'Josei',
-      u.careLevel,
-      u.staffName,
-    ]),
-    styles: { fontSize: 9 },
-    headStyles: { fillColor: [37, 99, 235] },
-    alternateRowStyles: { fillColor: [240, 245, 255] },
-  })
+  const body = `
+    <h1>利用者一覧</h1>
+    <table>
+      <thead>
+        <tr><th>氏名</th><th>ふりがな</th><th>生年月日</th><th>性別</th><th>介護度</th><th>担当者</th></tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`
 
-  addFooter(doc)
-  doc.save('riyousha-ichiran.pdf')
+  printHTML('利用者一覧', body)
 }
 
+/**
+ * exportUserProfilePDF — 利用者プロフィールと関連データを印刷する
+ * @param user        利用者データ
+ * @param plans       利用者のケアプラン配列
+ * @param notes       利用者の支援経過配列
+ * @param monitorings 利用者のモニタリング配列
+ * @param meetings    利用者の担当者会議配列
+ */
 export function exportUserProfilePDF(
   user: User,
   plans: CarePlan[],
@@ -63,93 +153,144 @@ export function exportUserProfilePDF(
   monitorings: Monitoring[],
   meetings: Meeting[]
 ) {
-  const doc = createDoc()
-  addHeader(doc, `Profile: ${user.name}`)
+  // 基本情報テーブル
+  const infoRows = [
+    ['氏名', `${escapeHtml(user.name)}（${escapeHtml(user.nameKana)}）`],
+    ['生年月日', `${escapeHtml(user.birthDate)}　${user.gender === 'male' ? '男性' : '女性'}`],
+    ['介護度', escapeHtml(user.careLevel)],
+    ['担当者', escapeHtml(user.staffName)],
+    ['電話番号', escapeHtml(user.phone)],
+    ['住所', escapeHtml(user.address)],
+    ['緊急連絡先', escapeHtml(user.emergencyContact)],
+  ].map(([label, value]) => `<tr><td style="font-weight:600;width:120px;">${label}</td><td>${value}</td></tr>`).join('')
 
-  doc.setFontSize(11)
-  let y = 28
-  doc.text(`Shimei: ${user.name}  (${user.nameKana})`, 14, y); y += 7
-  doc.text(`Seinengappi: ${user.birthDate}  Seibetsu: ${user.gender === 'male' ? 'Dansei' : 'Josei'}`, 14, y); y += 7
-  doc.text(`Kaigodo: ${user.careLevel}  Tantousha: ${user.staffName}`, 14, y); y += 7
-  doc.text(`Tel: ${user.phone}`, 14, y); y += 7
-  doc.text(`Jusho: ${user.address}`, 14, y); y += 7
-  doc.text(`Kinkyuu: ${user.emergencyContact}`, 14, y); y += 10
+  // ケアプランテーブル
+  const planRows = plans.map((p) => `
+    <tr>
+      <td>${escapeHtml(p.startDate)} 〜 ${escapeHtml(p.endDate)}</td>
+      <td>${escapeHtml(p.longTermGoal)}</td>
+      <td>${escapeHtml(p.shortTermGoal)}</td>
+    </tr>`).join('')
 
-  // Care plans
-  if (plans.length > 0) {
-    doc.setFontSize(12)
-    doc.setTextColor(37, 99, 235)
-    doc.text('Care Plan', 14, y); y += 2
-    doc.setTextColor(50, 50, 50)
-    autoTable(doc, {
-      startY: y,
-      head: [['Kikan', 'Choki Mokuhyou', 'Tanki Mokuhyou']],
-      body: plans.map((p) => [`${p.startDate}~${p.endDate}`, p.longTermGoal, p.shortTermGoal]),
-      styles: { fontSize: 8 },
-      headStyles: { fillColor: [37, 99, 235] },
-    })
-    y = (doc as jsPDF & { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6
-  }
+  // 支援経過テーブル（最新5件）
+  const noteRows = notes.slice(0, 5).map((n) => `
+    <tr>
+      <td style="white-space:nowrap">${escapeHtml(n.date)}</td>
+      <td style="white-space:nowrap">${escapeHtml(n.author)}</td>
+      <td style="white-space:pre-wrap">${escapeHtml(n.content)}</td>
+    </tr>`).join('')
 
-  // Progress notes (latest 5)
-  if (notes.length > 0) {
-    if (y > 240) { doc.addPage(); y = 20 }
-    doc.setFontSize(12)
-    doc.setTextColor(37, 99, 235)
-    doc.text('Shien Keika (latest 5)', 14, y); y += 2
-    doc.setTextColor(50, 50, 50)
-    autoTable(doc, {
-      startY: y,
-      head: [['Hiduke', 'Kirokusya', 'Naiyou']],
-      body: notes.slice(0, 5).map((n) => [n.date, n.author, n.content]),
-      styles: { fontSize: 8 },
-      headStyles: { fillColor: [37, 99, 235] },
-      columnStyles: { 2: { cellWidth: 100 } },
-    })
-    y = (doc as jsPDF & { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6
-  }
+  const body = `
+    <h1>${escapeHtml(user.name)}さん プロフィール</h1>
+    <h2>基本情報</h2>
+    <table><tbody>${infoRows}</tbody></table>
+    ${plans.length > 0 ? `
+    <h2>ケアプラン</h2>
+    <table>
+      <thead><tr><th>期間</th><th>長期目標</th><th>短期目標</th></tr></thead>
+      <tbody>${planRows}</tbody>
+    </table>` : ''}
+    ${notes.length > 0 ? `
+    <h2>支援経過（直近5件）</h2>
+    <table>
+      <thead><tr><th style="width:90px">日付</th><th style="width:80px">記録者</th><th>内容</th></tr></thead>
+      <tbody>${noteRows}</tbody>
+    </table>` : ''}
+    <div class="meta">モニタリング: ${monitorings.length}件 / 担当者会議: ${meetings.length}件</div>`
 
-  addFooter(doc)
-  doc.save(`${user.name}-profile.pdf`)
+  printHTML(`${user.name} - プロフィール`, body)
 }
 
+/**
+ * exportProgressNotesPDF — 支援経過一覧を印刷する
+ * @param notes  出力する支援経過データの配列
+ * @param users  利用者一覧（userId → 氏名の解決に使用）
+ */
 export function exportProgressNotesPDF(notes: ProgressNote[], users: User[]) {
-  const doc = createDoc()
-  addHeader(doc, 'Shien Keika Ichiran')
-
+  // userId から氏名を素早く引けるようにMapを作成する
   const usersMap = new Map(users.map((u) => [u.id, u.name]))
-  autoTable(doc, {
-    startY: 26,
-    head: [['Hiduke', 'Riyousha', 'Kirokusya', 'Naiyou']],
-    body: notes.map((n) => [n.date, usersMap.get(n.userId) ?? '-', n.author, n.content]),
-    styles: { fontSize: 8 },
-    headStyles: { fillColor: [37, 99, 235] },
-    columnStyles: { 3: { cellWidth: 90 } },
-  })
 
-  addFooter(doc)
-  doc.save('shien-keika.pdf')
+  const rows = notes.map((n) => `
+    <tr>
+      <td style="white-space:nowrap">${escapeHtml(n.date)}</td>
+      <td style="white-space:nowrap">${escapeHtml(usersMap.get(n.userId) ?? '—')}</td>
+      <td style="white-space:nowrap">${escapeHtml(n.author)}</td>
+      <td style="white-space:pre-wrap">${escapeHtml(n.content)}</td>
+    </tr>`).join('')
+
+  const body = `
+    <h1>支援経過一覧</h1>
+    <table>
+      <thead>
+        <tr><th style="width:90px">日付</th><th style="width:100px">利用者</th><th style="width:80px">記録者</th><th>内容</th></tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`
+
+  printHTML('支援経過一覧', body)
 }
 
+/**
+ * exportCarePlansPDF — ケアプラン一覧を印刷する
+ * @param plans  出力するケアプランデータの配列
+ * @param users  利用者一覧（userId → 氏名の解決に使用）
+ */
 export function exportCarePlansPDF(plans: CarePlan[], users: User[]) {
-  const doc = createDoc()
-  addHeader(doc, 'Care Plan Ichiran')
-
   const usersMap = new Map(users.map((u) => [u.id, u.name]))
-  autoTable(doc, {
-    startY: 26,
-    head: [['Riyousha', 'Kikan', 'Choki Mokuhyou', 'Tanki Mokuhyou']],
-    body: plans.map((p) => [
-      usersMap.get(p.userId) ?? '-',
-      `${p.startDate}~${p.endDate}`,
-      p.longTermGoal,
-      p.shortTermGoal,
-    ]),
-    styles: { fontSize: 8 },
-    headStyles: { fillColor: [37, 99, 235] },
-    columnStyles: { 2: { cellWidth: 55 }, 3: { cellWidth: 55 } },
-  })
 
-  addFooter(doc)
-  doc.save('care-plans.pdf')
+  const rows = plans.map((p) => `
+    <tr>
+      <td style="white-space:nowrap">${escapeHtml(usersMap.get(p.userId) ?? '—')}</td>
+      <td style="white-space:nowrap">${escapeHtml(p.startDate)} 〜 ${escapeHtml(p.endDate)}</td>
+      <td style="white-space:pre-wrap">${escapeHtml(p.longTermGoal)}</td>
+      <td style="white-space:pre-wrap">${escapeHtml(p.shortTermGoal)}</td>
+    </tr>`).join('')
+
+  const body = `
+    <h1>ケアプラン一覧</h1>
+    <table>
+      <thead>
+        <tr><th style="width:100px">利用者</th><th style="width:140px">期間</th><th>長期目標</th><th>短期目標</th></tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`
+
+  printHTML('ケアプラン一覧', body)
+}
+
+/**
+ * exportMonitoringsPDF — モニタリング一覧を印刷する
+ * @param monitorings  出力するモニタリングデータの配列
+ * @param users        利用者一覧（userId → 氏名の解決に使用）
+ */
+export function exportMonitoringsPDF(monitorings: Monitoring[], users: User[]) {
+  const usersMap = new Map(users.map((u) => [u.id, u.name]))
+
+  const rows = monitorings.map((m) => `
+    <tr>
+      <td style="white-space:nowrap">${escapeHtml(m.date)}</td>
+      <td style="white-space:nowrap">${escapeHtml(usersMap.get(m.userId) ?? '—')}</td>
+      <td style="white-space:nowrap">${escapeHtml(m.author)}</td>
+      <td style="white-space:pre-wrap">${escapeHtml(m.physicalCondition)}</td>
+      <td style="white-space:pre-wrap">${escapeHtml(m.mentalCondition)}</td>
+      <td style="white-space:pre-wrap">${escapeHtml(m.issues ?? '—')}</td>
+    </tr>`).join('')
+
+  const body = `
+    <h1>モニタリング一覧</h1>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:90px">日付</th>
+          <th style="width:90px">利用者</th>
+          <th style="width:70px">記録者</th>
+          <th>身体状態</th>
+          <th>精神状態</th>
+          <th>課題・問題点</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`
+
+  printHTML('モニタリング一覧', body)
 }

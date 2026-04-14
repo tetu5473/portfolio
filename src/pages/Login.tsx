@@ -1,3 +1,7 @@
+/**
+ * Login.tsx — ログインページ
+ * ID・パスワードを入力してセッションを開始する。認証成功でダッシュボードへ遷移する。
+ */
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { login } from '../utils/auth'

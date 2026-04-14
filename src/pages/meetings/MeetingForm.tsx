@@ -1,3 +1,7 @@
+/**
+ * MeetingForm.tsx — 担当者会議追加・編集フォームコンポーネント
+ * 参加者・検討内容・結論・今後の課題の各フィールドに音声入力が使える
+ */
 import { useState } from 'react'
 import type { Meeting, User } from '../../types'
 import { saveMeeting } from '../../utils/storage'

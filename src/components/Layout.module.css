@@ -1,3 +1,5 @@
+/* Layout.module.css — アプリ全体のレイアウト構造スタイル */
+/* サイドバー（固定幅）＋メインエリア（残り幅）の横並びレイアウトを定義する */
 .container {
   display: flex;
   min-height: 100vh;

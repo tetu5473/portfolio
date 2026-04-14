@@ -1,3 +1,5 @@
+/* Login.module.css — ログインページのスタイル */
+/* 画面中央にカードを配置するグラジェント背景レイアウト */
 .page {
   min-height: 100vh;
   display: flex;

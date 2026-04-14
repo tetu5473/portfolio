@@ -1,3 +1,7 @@
+/**
+ * MonitoringForm.tsx — モニタリング追加・編集フォームコンポーネント
+ * 身体状態・精神状態・サービス利用状況・課題の4フィールドそれぞれに音声入力が使える
+ */
 import { useState } from 'react'
 import type { Monitoring, User } from '../../types'
 import { saveMonitoring } from '../../utils/storage'

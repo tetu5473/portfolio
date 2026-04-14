@@ -1,3 +1,10 @@
+/**
+ * claudeApi.ts — AIチャット応答のモック実装
+ *
+ * ⚠️ このファイルは Claude API を実際には呼び出していない。
+ * ローカルストレージのデータをもとにルールベースで回答を生成するモックである。
+ * ポートフォリオ用のデモ実装のため、本番環境では実際の Claude API と差し替える必要がある。
+ */
 import { getUsers, getProgressNotes, getCarePlans, getMonitoringList, getMeetings } from './storage'
 
 export interface ClaudeMessage {
@@ -208,7 +215,9 @@ function adjustLength(text: string, targetChars: number): string {
 
 // ── エクスポート ──────────────────────────────────────────
 
-export async function askClaude(messages: ClaudeMessage[]): Promise<string> {
+// generateAIResponse: メッセージ配列を受け取り、AIの返答を生成して返す（旧名: askClaude）
+// 命名変更の理由: "askClaude" は内部実装（モック）が漏れた名前。関数の役割（AI応答生成）を表す名前に変更
+export async function generateAIResponse(messages: ClaudeMessage[]): Promise<string> {
   await sleep(600 + Math.random() * 600)
 
   const lastUser = [...messages].reverse().find((m) => m.role === 'user')

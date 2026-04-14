@@ -1,3 +1,5 @@
+/* Sidebar.module.css — 左ナビゲーションサイドバーのスタイル */
+/* ダークテーマ（#1E293B）を採用し、アクティブなリンクを青色でハイライトする */
 .sidebar {
   width: 220px;
   min-height: 100vh;

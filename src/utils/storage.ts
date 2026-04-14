@@ -1,3 +1,8 @@
+/**
+ * storage.ts — localStorage を使ったデータ永続化ユーティリティ
+ * 利用者・ケアプラン・支援経過・モニタリング・担当者会議の CRUD 操作を提供する
+ * サーバーを持たないポートフォリオのため、データはすべてブラウザの localStorage に保存される
+ */
 import type { User, CarePlan, ProgressNote, Monitoring, Meeting } from '../types'
 import { generateId } from './idUtils'
 

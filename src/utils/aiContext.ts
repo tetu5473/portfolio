@@ -1,6 +1,13 @@
+/**
+ * aiContext.ts — AIへ送るコンテキスト文字列を生成するユーティリティ
+ * ローカルストレージの利用者・支援経過・ケアプランデータを整形してAIに渡す
+ * データ量を抑えるため支援経過は最新20件、ケアプランは10件に絞っている
+ */
 import { getUsers, getProgressNotes, getCarePlans } from './storage'
 
-export function buildContext(): string {
+// buildAISystemPrompt: AIへ渡すシステムコンテキスト文字列を生成する（旧名: buildContext）
+// 命名変更の理由: 何を構築しているかが "buildAISystemPrompt" の方が明確
+export function buildAISystemPrompt(): string {
   const users = getUsers()
   const notes = getProgressNotes().slice(0, 20)
   const plans = getCarePlans().slice(0, 10)

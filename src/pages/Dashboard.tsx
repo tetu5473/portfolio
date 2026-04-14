@@ -1,3 +1,10 @@
+/**
+ * Dashboard.tsx — トップページのダッシュボードコンポーネント
+ * 統計サマリー・アラート（モニタリング未実施・ケアプラン期限切れ）・グラフを表示する
+ * recharts の PieChart（介護度分布）と BarChart（担当者別利用者数）を使用
+ * cx="50%" cy="50%" はグラフの中心座標をコンテナサイズの50%に指定している
+ * dataKey はグラフが参照するデータのプロパティ名、nameKey は凡例に表示するプロパティ名
+ */
 import { useState } from 'react'
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis } from 'recharts'
 import { getUsers, getCarePlans, getProgressNotes, getMeetings, getMonitoringList } from '../utils/storage'

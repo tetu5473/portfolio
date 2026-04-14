@@ -1,3 +1,5 @@
+/* Form.module.css — 各種フォーム（利用者・ケアプラン・支援経過等）共通スタイル */
+/* .voiceBtn: テキストエリア右下に固定表示されるマイクボタン（音声入力用） */
 .form {
   padding: 24px;
   display: flex;

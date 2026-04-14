@@ -1,3 +1,7 @@
+/**
+ * ProgressNoteForm.tsx — 支援経過追加・編集フォームコンポーネント
+ * 音声入力（useVoiceInput）で経過内容をマイク入力できる
+ */
 import { useState } from 'react'
 import type { ProgressNote, User } from '../../types'
 import { saveProgressNote } from '../../utils/storage'

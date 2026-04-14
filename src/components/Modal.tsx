@@ -1,3 +1,7 @@
+/**
+ * Modal.tsx — 汎用モーダルコンポーネント
+ * show=true のときにオーバーレイとダイアログを表示する。オーバーレイクリックで閉じる。
+ */
 import type { ReactNode } from 'react'
 import styles from '../pages/ListPage.module.css'
 

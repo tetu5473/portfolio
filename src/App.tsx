@@ -1,3 +1,7 @@
+/**
+ * App.tsx — アプリケーションのルートコンポーネント
+ * ルーティング設定と認証ガード（RequireAuth）を定義する
+ */
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { seedIfNeeded } from './utils/storage'

@@ -1,3 +1,7 @@
+/**
+ * CarePlanForm.tsx — ケアプラン追加・編集フォームコンポーネント
+ * plan が null のとき新規追加、値があるとき編集モードとして動作する
+ */
 import { useState } from 'react'
 import type { CarePlan, User } from '../../types'
 import { saveCarePlan } from '../../utils/storage'

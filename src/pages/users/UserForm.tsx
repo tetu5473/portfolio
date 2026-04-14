@@ -1,3 +1,7 @@
+/**
+ * UserForm.tsx — 利用者追加・編集フォームコンポーネント
+ * user が null のとき新規追加、値があるとき編集モードとして動作する
+ */
 import { useState } from 'react'
 import type { User } from '../../types'
 import { saveUser } from '../../utils/storage'

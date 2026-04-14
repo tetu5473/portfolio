@@ -1,3 +1,9 @@
+/**
+ * types/index.ts — アプリ全体で使用する型定義
+ * User・CarePlan・ProgressNote・Monitoring・Meeting・WeatherData の型を定義する
+ */
+
+/** 利用者情報 */
 export interface User {
   id: string
   name: string
@@ -12,6 +18,7 @@ export interface User {
   createdAt: string
 }
 
+/** ケアプラン（長期・短期目標とサービス内容） */
 export interface CarePlan {
   id: string
   userId: string
@@ -23,6 +30,7 @@ export interface CarePlan {
   createdAt: string
 }
 
+/** 支援経過記録 */
 export interface ProgressNote {
   id: string
   userId: string
@@ -32,6 +40,7 @@ export interface ProgressNote {
   createdAt: string
 }
 
+/** モニタリング記録（身体・精神状態、サービス利用状況、課題） */
 export interface Monitoring {
   id: string
   userId: string
@@ -44,6 +53,7 @@ export interface Monitoring {
   createdAt: string
 }
 
+/** 担当者会議記録 */
 export interface Meeting {
   id: string
   userId: string
@@ -57,6 +67,7 @@ export interface Meeting {
   createdAt: string
 }
 
+/** 天気情報（ヘッダーに表示） */
 export interface WeatherData {
   city: string
   temp: number

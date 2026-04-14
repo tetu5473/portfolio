@@ -1,3 +1,7 @@
+/**
+ * Sidebar.tsx — 左側ナビゲーションサイドバーコンポーネント
+ * 各ページへのリンクを一覧表示し、現在のページをハイライトする
+ */
 import { NavLink } from 'react-router-dom'
 import styles from './Sidebar.module.css'
 

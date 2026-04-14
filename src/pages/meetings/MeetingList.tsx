@@ -1,7 +1,12 @@
+/**
+ * MeetingList.tsx — 担当者会議一覧ページ
+ * 利用者フィルタ・日付降順表示・追加・編集・削除を行う
+ */
 import { useState } from 'react'
 import type { Meeting, User } from '../../types'
 import { getMeetings, deleteMeeting, getUsers } from '../../utils/storage'
-import { useListPage } from '../../hooks/useListPage'
+// useCrudList: 一覧表示に必要な状態管理・操作をまとめたカスタムフック（旧: useListPage）
+import { useCrudList } from '../../hooks/useCrudList'
 import MeetingForm from './MeetingForm'
 import Modal from '../../components/Modal'
 import UserFilterSelect from '../../components/UserFilterSelect'
@@ -11,17 +16,17 @@ const byDateDesc = (a: Meeting, b: Meeting) => b.date.localeCompare(a.date)
 
 export default function MeetingList() {
   const [users] = useState<User[]>(() => getUsers())
-  const { filtered, editing, showForm, filterUserId, setFilterUserId, handleSaved, handleEdit, handleNew, handleDelete, handleClose } =
-    useListPage<Meeting>({ fetchAll: getMeetings, deleteItem: deleteMeeting, sort: byDateDesc })
+  const { filteredItems, editing, showForm, filterUserId, setFilterUserId, handleSave, handleEdit, handleNew, handleDelete, handleClose } =
+    useCrudList<Meeting>({ fetchAll: getMeetings, deleteItem: deleteMeeting, sort: byDateDesc })
 
   return (
     <div>
       <div className={styles.toolbar}>
-        <UserFilterSelect users={users} value={filterUserId} onChange={setFilterUserId} count={filtered.length} />
+        <UserFilterSelect users={users} value={filterUserId} onChange={setFilterUserId} count={filteredItems.length} />
         <button className={styles.btnPrimary} onClick={handleNew}>+ 会議追加</button>
       </div>
 
-      {filtered.length === 0 ? (
+      {filteredItems.length === 0 ? (
         <div className={styles.empty}>担当者会議記録がありません</div>
       ) : (
         <div className={styles.tableWrap}>
@@ -33,7 +38,7 @@ export default function MeetingList() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((m) => {
+              {filteredItems.map((m) => {
                 const user = users.find((u) => u.id === m.userId)
                 return (
                   <tr key={m.id} style={{ cursor: 'pointer' }} onClick={() => handleEdit(m)}>
@@ -58,7 +63,7 @@ export default function MeetingList() {
       )}
 
       <Modal show={showForm} title={editing ? '担当者会議編集' : '担当者会議追加'} onClose={handleClose}>
-        <MeetingForm meeting={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
+        <MeetingForm meeting={editing} users={users} onSaved={handleSave} onCancel={handleClose} />
       </Modal>
     </div>
   )

@@ -1,3 +1,5 @@
+/* TextImprove.module.css — テキスト選択時に表示されるAI改善パネルのスタイル */
+/* .panel: テキスト選択位置に追従してフローティング表示される小型パネル */
 .panel {
   position: fixed;
   z-index: 2000;

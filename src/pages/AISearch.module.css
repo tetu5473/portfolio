@@ -1,8 +1,10 @@
+/* AISearch.module.css — AI検索ページのスタイル */
+/* チャットエリア（左）＋よく使う質問サイドバー（右）の2カラムレイアウト */
 .page {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  height: calc(100vh - 60px - 56px);
+  height: calc(100vh - 60px - 56px); /* 全体の高さからヘッダーとパディング分を引いた高さ */
 }
 
 .apiWarning {

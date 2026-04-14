@@ -1,3 +1,5 @@
+/* index.css — アプリ全体のグローバルスタイル */
+/* リセット・フォント設定・基本カラー・汎用要素スタイルを定義する */
 *, *::before, *::after {
   box-sizing: border-box;
 }

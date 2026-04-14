@@ -1,7 +1,13 @@
+/**
+ * AISearch.tsx — AI介護ケアアシスタントページ
+ * ケア記録データをコンテキストとして付加し、介護に関する質問への回答・文章生成を行う
+ */
 import { useState } from 'react'
 import type { ClaudeMessage } from '../utils/claudeApi'
-import { askClaude } from '../utils/claudeApi'
-import { buildContext } from '../utils/aiContext'
+// generateAIResponse: AI応答を生成する関数（旧名: askClaude）
+import { generateAIResponse } from '../utils/claudeApi'
+// buildAISystemPrompt: AIへ渡すコンテキスト文字列を生成する（旧名: buildContext）
+import { buildAISystemPrompt } from '../utils/aiContext'
 import styles from './AISearch.module.css'
 
 const SUGGESTIONS = [
@@ -20,7 +26,7 @@ export default function AISearch() {
     const text = query.trim()
     if (!text || loading) return
 
-    const context = buildContext()
+    const context = buildAISystemPrompt()
     const userMessage: ClaudeMessage = {
       role: 'user',
       content: `以下はケア管理システムのデータです。このデータをもとに質問に答えてください。\n\n${context}\n\n---\n\n質問: ${text}`,
@@ -32,7 +38,7 @@ export default function AISearch() {
     setLoading(true)
 
     try {
-      const reply = await askClaude(newMessages)
+      const reply = await generateAIResponse(newMessages)
       setMessages([...newMessages, { role: 'assistant', content: reply }])
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'エラーが発生しました'

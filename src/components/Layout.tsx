@@ -1,3 +1,7 @@
+/**
+ * Layout.tsx — 認証済みページ共通のレイアウトコンポーネント
+ * サイドバー・ヘッダー・メインコンテンツ・フローティングAI・TextImproveを配置する
+ */
 import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Header from './Header'

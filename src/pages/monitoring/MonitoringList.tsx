@@ -1,7 +1,13 @@
+/**
+ * MonitoringList.tsx — モニタリング一覧ページ
+ * 利用者フィルタ・日付降順表示・追加・編集・削除を行う
+ */
 import { useState } from 'react'
 import type { Monitoring, User } from '../../types'
 import { getMonitoringList, deleteMonitoring, getUsers } from '../../utils/storage'
-import { useListPage } from '../../hooks/useListPage'
+import { exportMonitoringsPDF } from '../../utils/pdfUtils'
+// useCrudList: 一覧表示に必要な状態管理・操作をまとめたカスタムフック（旧: useListPage）
+import { useCrudList } from '../../hooks/useCrudList'
 import MonitoringForm from './MonitoringForm'
 import Modal from '../../components/Modal'
 import UserFilterSelect from '../../components/UserFilterSelect'
@@ -11,17 +17,21 @@ const byDateDesc = (a: Monitoring, b: Monitoring) => b.date.localeCompare(a.date
 
 export default function MonitoringList() {
   const [users] = useState<User[]>(() => getUsers())
-  const { filtered, editing, showForm, filterUserId, setFilterUserId, handleSaved, handleEdit, handleNew, handleDelete, handleClose } =
-    useListPage<Monitoring>({ fetchAll: getMonitoringList, deleteItem: deleteMonitoring, sort: byDateDesc })
+  const { filteredItems, editing, showForm, filterUserId, setFilterUserId, handleSave, handleEdit, handleNew, handleDelete, handleClose } =
+    useCrudList<Monitoring>({ fetchAll: getMonitoringList, deleteItem: deleteMonitoring, sort: byDateDesc })
 
   return (
     <div>
       <div className={styles.toolbar}>
-        <UserFilterSelect users={users} value={filterUserId} onChange={setFilterUserId} count={filtered.length} />
-        <button className={styles.btnPrimary} onClick={handleNew}>+ モニタリング追加</button>
+        <UserFilterSelect users={users} value={filterUserId} onChange={setFilterUserId} count={filteredItems.length} />
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {/* PDFエクスポート: ブラウザの print 機能で日本語を正しく出力する */}
+          <button className={styles.btnEdit} onClick={() => exportMonitoringsPDF(filteredItems, users)}>PDFエクスポート</button>
+          <button className={styles.btnPrimary} onClick={handleNew}>+ モニタリング追加</button>
+        </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {filteredItems.length === 0 ? (
         <div className={styles.empty}>モニタリング記録がありません</div>
       ) : (
         <div className={styles.tableWrap}>
@@ -33,7 +43,7 @@ export default function MonitoringList() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((m) => {
+              {filteredItems.map((m) => {
                 const user = users.find((u) => u.id === m.userId)
                 return (
                   <tr key={m.id} style={{ cursor: 'pointer' }} onClick={() => handleEdit(m)}>
@@ -56,7 +66,7 @@ export default function MonitoringList() {
       )}
 
       <Modal show={showForm} title={editing ? 'モニタリング編集' : 'モニタリング追加'} onClose={handleClose}>
-        <MonitoringForm monitoring={editing} users={users} onSaved={handleSaved} onCancel={handleClose} />
+        <MonitoringForm monitoring={editing} users={users} onSaved={handleSave} onCancel={handleClose} />
       </Modal>
     </div>
   )

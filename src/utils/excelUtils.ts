@@ -112,6 +112,14 @@ export function importUsers(file: File): Promise<{ count: number; errors: string
   })
 }
 
+/**
+ * FileReader を使った非同期ファイル読み込みの流れ:
+ * 1. new FileReader() でインスタンスを作成
+ * 2. reader.onload にコールバックを先に登録する（読み込み完了時に呼ばれる）
+ * 3. reader.readAsBinaryString(file) で読み込みを開始する
+ * ※ onload の登録より先に readAsBinaryString を呼ぶと、
+ *    読み込みが完了してもコールバックが存在せず結果を受け取れなくなるため順番が重要
+ */
 function readSheet(file: File): Promise<{ data: Record<string, string>[]; errors: string[] }> {
   return new Promise((resolve) => {
     const reader = new FileReader()

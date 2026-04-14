@@ -1,3 +1,5 @@
+/* Dashboard.module.css — ダッシュボードページのスタイル */
+/* 統計カード・アラート・テーブル・グラフを含む複合レイアウトを定義する */
 .page {
   display: flex;
   flex-direction: column;
