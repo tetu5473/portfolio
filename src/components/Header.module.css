@@ -1,3 +1,5 @@
+/* Header.module.css — アプリ上部ヘッダーバーのスタイル */
+/* 左にページタイトル、右に日付・天気・時刻・ログアウトボタンを配置する */
 .header {
   height: 60px;
   background: #fff;

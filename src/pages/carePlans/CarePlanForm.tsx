@@ -16,6 +16,7 @@ interface Props {
 }
 
 export default function CarePlanForm({ plan, users, onSaved, onCancel }: Props) {
+  // 編集時は既存データを初期値にセット。新規追加時は先頭の利用者を初期選択する
   const [form, setForm] = useState({
     userId: plan?.userId ?? (users[0]?.id ?? ''),
     longTermGoal: plan?.longTermGoal ?? '',
@@ -25,13 +26,16 @@ export default function CarePlanForm({ plan, users, onSaved, onCancel }: Props) 
     endDate: plan?.endDate ?? '',
   })
 
+  // set: 単一フィールドだけを更新するユーティリティ関数（スプレッドで既存値を保持する）
   function set(field: keyof typeof form, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
+  // Cmd+Enter（Mac）または Ctrl+Enter（Windows）でフォームを送信できるようにする
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault()
+      // closest('form') でイベント発生元の最も近い form 要素を取得して送信する
       const form = e.currentTarget.closest('form')
       if (form) form.requestSubmit()
     }
@@ -40,8 +44,10 @@ export default function CarePlanForm({ plan, users, onSaved, onCancel }: Props) 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const saved: CarePlan = {
+      // 編集時は既存 id を維持し、新規追加時は一意な id を生成する
       id: plan?.id ?? generateId(),
       ...form,
+      // createdAt は初回作成時のみ設定し、編集時は変更しない
       createdAt: plan?.createdAt ?? new Date().toISOString(),
     }
     saveCarePlan(saved)
@@ -68,6 +74,7 @@ export default function CarePlanForm({ plan, users, onSaved, onCancel }: Props) 
         <label className={styles.label}>サービス内容 <span className={styles.required}>*</span></label>
         <textarea className={styles.textarea} value={form.services} onChange={(e) => set('services', e.target.value)} required rows={3} />
       </div>
+      {/* grid2: 開始日と終了日を横並びに表示するグリッドレイアウト */}
       <div className={styles.grid2}>
         <div className={styles.field}>
           <label className={styles.label}>開始日 <span className={styles.required}>*</span></label>
