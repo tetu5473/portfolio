@@ -1,58 +1,68 @@
+/* AISearch.module.css — AI検索ページのスタイル */
+/* チャットエリア（左）＋よく使う質問サイドバー（右）の2カラムレイアウト */
+
+/* .page: ページ全体のコンテナ（高さはヘッダーとパディング分を引いた残りを使う） */
 .page {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  height: calc(100vh - 60px - 56px);
+  height: calc(100vh - 60px - 56px); /* 全体高さ - ヘッダー60px - コンテンツパディング56px */
 }
 
+/* .apiWarning: APIキー未設定時に表示する黄色の警告バナー */
 .apiWarning {
   background: #FEF3C7;
   border: 1px solid #FCD34D;
   border-radius: 8px;
   padding: 14px 18px;
   font-size: 13px;
-  color: #92400E;
+  color: #92400E;        /* 濃いオレンジ茶色で警告感を出す */
   line-height: 1.6;
 }
 
+/* .apiWarning code: 警告内のコードスニペット（環境変数名など） */
 .apiWarning code {
-  background: #FDE68A;
+  background: #FDE68A;   /* 少し濃い黄色でコードを区別する */
   padding: 1px 6px;
   border-radius: 3px;
   font-family: monospace;
 }
 
+/* .layout: チャットエリアと質問サイドバーを横並びにする2カラムグリッド */
 .layout {
   display: grid;
-  grid-template-columns: 1fr 260px;
+  grid-template-columns: 1fr 260px; /* 左がメインチャット、右が固定幅サイドバー */
   gap: 20px;
-  flex: 1;
-  min-height: 0;
+  flex: 1;               /* 親(.page)の残りスペースを使い切る */
+  min-height: 0;         /* flex/grid の子要素が親を超えて伸びないようにする */
 }
 
+/* .chatArea: チャット履歴・入力エリアをまとめた左カラム */
 .chatArea {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* メッセージ一覧を上、入力エリアを下に配置する */
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.07);
-  overflow: hidden;
+  overflow: hidden;      /* 角丸の外にはみ出した子要素をクリップする */
 }
 
+/* .messages: チャット履歴を縦に並べるスクロール可能エリア */
 .messages {
-  flex: 1;
-  overflow-y: auto;
+  flex: 1;               /* 入力エリアを除いた残りの縦スペースを使う */
+  overflow-y: auto;      /* メッセージが溢れたら縦スクロールを有効にする */
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 16px;             /* メッセージ間の余白 */
 }
 
+/* .welcome: メッセージが0件のときに表示するウェルカム画面 */
 .welcome {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center; /* 縦横中央に配置する */
   height: 100%;
   gap: 12px;
   color: #94A3B8;
@@ -60,72 +70,88 @@
   padding: 40px;
 }
 
+/* .welcomeIcon: ウェルカム画面の大きなアイコン絵文字 */
 .welcomeIcon {
   font-size: 48px;
 }
 
+/* .welcomeTitle: ウェルカム画面のタイトルテキスト */
 .welcomeTitle {
   font-size: 18px;
   font-weight: 700;
   color: #475569;
 }
 
+/* .welcomeDesc: ウェルカム画面の説明テキスト */
 .welcomeDesc {
   font-size: 14px;
   line-height: 1.7;
   color: #94A3B8;
 }
 
+/* ── メッセージ表示 ── */
+
+/* .message: 1件のメッセージ（ユーザーまたはAI） */
 .message {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  max-width: 85%;
+  gap: 6px;              /* 送信者名とテキストの間の余白 */
+  max-width: 85%;        /* 長いメッセージが画面幅いっぱいに広がるのを防ぐ */
 }
 
+/* ユーザーメッセージは右端に寄せる */
 .message.user {
   align-self: flex-end;
 }
 
+/* AIメッセージは左端に寄せる */
 .message.assistant {
   align-self: flex-start;
 }
 
+/* .messageRole: 「あなた」「AI」などの送信者名ラベル */
 .messageRole {
   font-size: 11px;
   font-weight: 600;
-  color: #94A3B8;
+  color: #94A3B8;        /* 薄いグレーで補助情報として表示する */
 }
 
+/* .messageContent: メッセージのテキスト本体 */
 .messageContent {
   padding: 12px 16px;
   border-radius: 10px;
   font-size: 14px;
   line-height: 1.6;
-  white-space: pre-wrap;
-  word-break: break-word;
+  white-space: pre-wrap; /* 改行コードを改行として表示する */
+  word-break: break-word; /* 長い単語も折り返して枠内に収める */
 }
 
+/* ユーザーメッセージは青背景・右下角が尖ったチャット吹き出し形状 */
 .message.user .messageContent {
   background: #2563EB;
   color: #fff;
-  border-radius: 10px 10px 2px 10px;
+  border-radius: 10px 10px 2px 10px; /* 右下だけを尖らせて吹き出し感を出す */
 }
 
+/* AIメッセージはグレー背景・左下角が尖ったチャット吹き出し形状 */
 .message.assistant .messageContent {
   background: #F1F5F9;
   color: #1E293B;
-  border-radius: 10px 10px 10px 2px;
+  border-radius: 10px 10px 10px 2px; /* 左下だけを尖らせる */
 }
 
+/* ── タイピングインジケーター ── */
+
+/* .typing: AIが回答を生成中であることを示すドットアニメーション */
 .typing {
   display: flex;
   gap: 5px;
   padding: 14px 18px;
   background: #F1F5F9;
-  border-radius: 10px 10px 10px 2px;
+  border-radius: 10px 10px 10px 2px; /* AIメッセージと同じ吹き出し形状にする */
 }
 
+/* .typing span: ドット1個。3個並べてバウンスさせる */
 .typing span {
   width: 8px;
   height: 8px;
@@ -134,22 +160,28 @@
   animation: bounce 1.2s infinite;
 }
 
+/* 2・3個目のドットの開始タイミングをずらして波打つように見せる */
 .typing span:nth-child(2) { animation-delay: 0.2s; }
 .typing span:nth-child(3) { animation-delay: 0.4s; }
 
+/* バウンスアニメーション */
 @keyframes bounce {
   0%, 60%, 100% { transform: translateY(0); }
   30% { transform: translateY(-6px); }
 }
 
+/* ── テキスト入力エリア ── */
+
+/* .inputArea: テキスト入力とボタン群を含む下部エリア */
 .inputArea {
   padding: 16px 20px;
-  border-top: 1px solid #E2E8F0;
+  border-top: 1px solid #E2E8F0; /* チャット一覧との区切り線 */
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* .queryInput: 質問を入力するテキストエリア */
 .queryInput {
   width: 100%;
   padding: 10px 14px;
@@ -157,28 +189,32 @@
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
-  resize: none;
+  resize: none;          /* ユーザーが手動でリサイズできないようにする */
   color: #1E293B;
   transition: border-color 0.15s;
-  box-sizing: border-box;
+  box-sizing: border-box; /* padding を width に含めて幅を 100% に保つ */
 }
 
+/* フォーカス時は青枠 + 薄い青のグロー効果でアクティブを示す */
 .queryInput:focus {
   outline: none;
   border-color: #2563EB;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+/* AI生成中は入力欄を薄いグレーにして操作できないことを示す */
 .queryInput:disabled {
   background: #F8FAFC;
 }
 
+/* .inputActions: 「クリア」「送信」ボタンを右端に並べる */
 .inputActions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
 
+/* .btnSend: 「送信」ボタン（青） */
 .btnSend {
   background: #2563EB;
   color: #fff;
@@ -191,15 +227,18 @@
   transition: background 0.15s;
 }
 
+/* ホバー時は少し暗い青にする */
 .btnSend:hover:not(:disabled) {
   background: #1D4ED8;
 }
 
+/* AI生成中はボタンを半透明にして連打できないようにする */
 .btnSend:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
+/* .btnClear: 会話履歴をクリアするボタン */
 .btnClear {
   background: #fff;
   color: #64748B;
@@ -211,10 +250,14 @@
   transition: background 0.15s;
 }
 
+/* ホバー時は薄いグレーで反応を示す */
 .btnClear:hover:not(:disabled) {
   background: #F8FAFC;
 }
 
+/* ── 質問サイドバー ── */
+
+/* .sidebar: よく使う質問のショートカットボタンを並べた右カラム */
 .sidebar {
   background: #fff;
   border-radius: 8px;
@@ -223,9 +266,10 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  overflow-y: auto;
+  overflow-y: auto;      /* 質問が多い場合はスクロールで表示する */
 }
 
+/* .sideTitle: サイドバーのタイトルテキスト */
 .sideTitle {
   font-size: 13px;
   font-weight: 700;
@@ -233,14 +277,16 @@
   margin: 0;
 }
 
+/* .suggestions: 質問ショートカットボタンを縦に並べるコンテナ */
 .suggestions {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
+/* .suggestionBtn: クリックするとチャット入力欄に質問を挿入するボタン */
 .suggestionBtn {
-  text-align: left;
+  text-align: left;      /* ボタン内テキストを左寄せにする */
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
   border-radius: 6px;
@@ -252,6 +298,7 @@
   transition: background 0.15s, border-color 0.15s;
 }
 
+/* ホバー時は青みを帯びた背景にしてクリッカブルであることを示す */
 .suggestionBtn:hover {
   background: #EFF6FF;
   border-color: #BFDBFE;

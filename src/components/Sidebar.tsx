@@ -1,3 +1,7 @@
+/**
+ * Sidebar.tsx — 左側ナビゲーションサイドバーコンポーネント
+ * 各ページへのリンクを一覧表示し、現在のページをハイライトする
+ */
 import { NavLink } from 'react-router-dom'
 import styles from './Sidebar.module.css'
 
@@ -9,6 +13,8 @@ const navItems = [
   { to: '/monitoring', label: 'モニタリング', icon: '📊' },
   { to: '/meetings', label: '担当者会議', icon: '🤝' },
   { to: '/search', label: 'AI検索', icon: '🤖' },
+  { to: '/ocr', label: '画像読み取り', icon: '🖼️' },
+  { to: '/email', label: 'メール送信', icon: '✉️' },
 ]
 
 export default function Sidebar() {

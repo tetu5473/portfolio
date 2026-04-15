@@ -1,0 +1,149 @@
+/* EmailSend.module.css — メール送信フォームページのスタイル */
+/* 画面中央寄りのシングルカードレイアウト。モックAPI使用の旨を告知するバナーを含む */
+
+/* .page: ページコンテンツを最大幅に制限して左寄せで表示するコンテナ */
+.page {
+  max-width: 640px;      /* 入力フォームが横に広がりすぎないよう幅を制限する */
+}
+
+/* .card: メール入力フォームを囲むホワイトカード */
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  padding: 28px 32px;
+}
+
+/* .mockBanner: 実際には送信されないモックAPIであることを知らせるオレンジ警告バナー */
+.mockBanner {
+  background: #FFF7ED;   /* 薄いオレンジ背景 */
+  border: 1px solid #FED7AA;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #C2410C;        /* 濃いオレンジで警告を示す */
+  margin-bottom: 20px;   /* フォームとの余白 */
+  display: flex;
+  align-items: center;
+  gap: 8px;              /* アイコンとテキストの間隔 */
+}
+
+/* .form: 入力フィールドとボタンを縦に積むフォームコンテナ */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* .field: ラベル＋入力欄をまとめた1フィールド単位のコンテナ */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* .label: 入力欄の上に表示するフィールド名テキスト */
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* .input / .textarea: テキスト入力フィールド・テキストエリア共通スタイル */
+.input,
+.textarea {
+  padding: 10px 14px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1E293B;
+  outline: none;
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+
+/* フォーカス時は青枠 + 薄い青のグロー効果でアクティブを示す */
+.input:focus,
+.textarea:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* .textarea: メール本文入力エリア（最低高さを確保し縦方向のリサイズを許可する） */
+.textarea {
+  min-height: 160px;
+  resize: vertical;      /* 縦方向のみリサイズ可能にする */
+}
+
+/* .footer: 「リセット」「送信」ボタンを右端に並べるフッターエリア */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* ボタンを右端に寄せる */
+  gap: 12px;
+}
+
+/* .submitBtn: 「送信する」ボタン（青のメインアクションボタン） */
+.submitBtn {
+  background: #2563EB;
+  color: #fff;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+/* ホバー時は少し暗い青にする */
+.submitBtn:hover {
+  background: #1D4ED8;
+}
+
+/* 送信中はボタンを薄い青にして連打できないようにする */
+.submitBtn:disabled {
+  background: #93C5FD;
+  cursor: not-allowed;
+}
+
+/* .resetBtn: フォームをリセットするボタン（グレーのサブアクション） */
+.resetBtn {
+  background: #F1F5F9;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+/* ホバー時は少し濃いグレーにする */
+.resetBtn:hover {
+  background: #E2E8F0;
+}
+
+/* .successMsg: 送信成功時に表示する緑のフィードバックメッセージ */
+.successMsg {
+  background: #DCFCE7;
+  border: 1px solid #BBF7D0;
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: #15803D;        /* 濃い緑で成功を示す */
+  font-weight: 600;
+  margin-top: 16px;
+}
+
+/* .errorMsg: 送信失敗時に表示する赤のフィードバックメッセージ */
+.errorMsg {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: #DC2626;        /* 赤でエラーを示す */
+  margin-top: 16px;
+}

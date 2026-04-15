@@ -1,14 +1,19 @@
+/* Header.module.css — アプリ上部ヘッダーバーのスタイル */
+/* 左にページタイトル、右に日付・天気・時刻・ログアウトボタンを配置する */
+
+/* .header: 画面上部に固定されるヘッダーバー全体 */
 .header {
-  height: 60px;
+  height: 60px;                       /* サイドバーのロゴエリアと高さを揃える */
   background: #fff;
-  border-bottom: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;  /* コンテンツエリアとの区切り線 */
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between;     /* 左にタイトル、右に各種情報を両端配置する */
   padding: 0 28px;
-  flex-shrink: 0;
+  flex-shrink: 0;                     /* コンテンツが増えてもヘッダーの高さが縮まないようにする */
 }
 
+/* .title: 現在表示しているページ名（左端） */
 .title {
   font-size: 18px;
   font-weight: 700;
@@ -16,51 +21,79 @@
   margin: 0;
 }
 
+/* .right: 日付・天気・時刻・ログアウトボタンをまとめた右側グループ */
 .right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 20px;             /* 各情報ブロック間の余白 */
 }
 
+/* .date: 今日の日付テキスト（例: 2026年4月14日） */
 .date {
   font-size: 13px;
-  color: #64748B;
+  color: #64748B;        /* 補助情報なので薄いグレーにする */
 }
 
+/* .weather: 天気アイコン・気温・天気説明・都市名をまとめたカプセル型コンテナ */
 .weather {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #F1F5F9;
-  padding: 4px 12px 4px 4px;
-  border-radius: 20px;
+  background: #F1F5F9;   /* 薄いグレー背景で他の要素と区別する */
+  padding: 4px 12px 4px 4px; /* アイコンの左はぴったり、右は余白多めにする */
+  border-radius: 20px;   /* カプセル型の丸みをつける */
 }
 
+/* .weatherIcon: 天気アイコン画像（OpenWeatherMap から取得した PNG） */
 .weatherIcon {
   width: 32px;
   height: 32px;
 }
 
+/* .weatherTemp: 現在の気温テキスト（例: 18°C） */
 .weatherTemp {
   font-size: 14px;
   font-weight: 600;
   color: #1E293B;
 }
 
+/* .weatherDesc: 天気の説明テキスト（例: 晴れ） */
 .weatherDesc {
   font-size: 12px;
   color: #64748B;
 }
 
+/* .time: 現在時刻のデジタル時計表示（1秒ごとに更新される） */
 .time {
   font-size: 14px;
   font-weight: 600;
   color: #1E293B;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums; /* 数字の幅を固定して時刻が動いても幅が変わらないようにする */
 }
 
+/* .weatherCity: 天気取得対象の都市名（例: 東京） */
 .weatherCity {
   font-size: 12px;
   font-weight: 600;
-  color: #2563EB;
+  color: #2563EB;        /* ブランドカラーで都市名を強調する */
+}
+
+/* .logoutBtn: ログアウトボタン（右端） */
+.logoutBtn {
+  background: #F1F5F9;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+/* ホバー時に赤みを帯びた色に変えてログアウト操作であることを視覚的に警告する */
+.logoutBtn:hover {
+  background: #FEF2F2;
+  color: #DC2626;
+  border-color: #FECACA;
 }

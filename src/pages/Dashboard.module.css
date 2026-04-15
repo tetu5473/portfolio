@@ -1,23 +1,30 @@
+/* Dashboard.module.css — ダッシュボードページのスタイル */
+/* 統計カード・アラート・テーブル・グラフを含む複合レイアウトを定義する */
+
+/* .page: ダッシュボード全体を縦に積むコンテナ */
 .page {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 24px;             /* セクション間の余白 */
 }
 
+/* .statsGrid: 利用者数・ケアプラン数などの統計カードを横4列で表示する */
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr); /* 4等分のグリッド */
   gap: 16px;
 }
 
+/* .statCard: 統計数値1件を表示するカード */
 .statCard {
   background: #fff;
   border-radius: 8px;
   padding: 20px 24px;
-  border-top: 4px solid #2563EB;
+  border-top: 4px solid #2563EB; /* 上端の青いアクセントラインでカードを際立たせる */
   box-shadow: 0 1px 3px rgba(0,0,0,0.07);
 }
 
+/* .statValue: 統計の数値（大きく目立つように表示する） */
 .statValue {
   font-size: 36px;
   font-weight: 700;
@@ -25,31 +32,36 @@
   margin-bottom: 6px;
 }
 
+/* .statUnit: 統計値の単位テキスト（例: 「人」「件」） */
 .statUnit {
   font-size: 16px;
   font-weight: 500;
   margin-left: 2px;
 }
 
+/* .statLabel: 統計の説明ラベル（例: 「登録利用者数」） */
 .statLabel {
   font-size: 13px;
-  color: #64748B;
+  color: #64748B;        /* 補助テキストは薄いグレーで控えめにする */
   font-weight: 500;
 }
 
+/* .row: 最近の記録テーブル（左）と情報サイドカード（右）を横並びにするレイアウト */
 .row {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 1fr 300px; /* 左がメインテーブル、右が固定幅サイドカード */
   gap: 24px;
-  align-items: start;
+  align-items: start;    /* カードの高さが違ってもそれぞれ上端で揃える */
 }
 
+/* .sideCards: 右列のカードを縦に積むコンテナ */
 .sideCards {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+/* .card: 情報を表示する汎用ホワイトカード */
 .card {
   background: #fff;
   border-radius: 8px;
@@ -57,19 +69,22 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.07);
 }
 
+/* .cardTitle: カードのタイトルテキスト */
 .cardTitle {
   font-size: 15px;
   font-weight: 700;
   color: #1E293B;
-  margin: 0 0 16px;
+  margin: 0 0 16px;      /* タイトル下に余白を設ける */
 }
 
+/* .table: カード内に表示するコンパクトなデータテーブル */
 .table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
 }
 
+/* .table th: テーブルヘッダーセル */
 .table th {
   text-align: left;
   padding: 8px 12px;
@@ -79,54 +94,67 @@
   border-bottom: 1px solid #E2E8F0;
 }
 
+/* .table td: テーブルデータセル */
 .table td {
   padding: 10px 12px;
   border-bottom: 1px solid #F1F5F9;
   color: #334155;
 }
 
+/* 最終行の下罫線を消す */
 .table tr:last-child td {
   border-bottom: none;
 }
 
+/* .truncate: 長いテキストを省略記号で切り詰めるクラス（テーブルセル内で使う） */
 .truncate {
   max-width: 200px;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-overflow: ellipsis; /* 溢れた部分を「...」で置き換える */
+  white-space: nowrap;   /* テキストを1行に保って折り返させない */
 }
 
+/* .empty: データが0件のときに表示するグレーテキスト */
 .empty {
   font-size: 13px;
   color: #94A3B8;
   margin: 0;
 }
 
+/* ── 天気ウィジェット ── */
+
+/* .weatherDetail: 天気アイコンと詳細テキストを横並びにする */
 .weatherDetail {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
+/* .weatherImg: 天気アイコン画像（OpenWeatherMap から取得した PNG） */
 .weatherImg {
   width: 60px;
   height: 60px;
 }
 
+/* .weatherBig: 大きく表示する気温テキスト（例: 18°C） */
 .weatherBig {
   font-size: 28px;
   font-weight: 700;
   color: #1E293B;
 }
 
+/* .weatherSub: 天気説明や湿度などの補足テキスト */
 .weatherSub {
   font-size: 13px;
   color: #64748B;
   margin-top: 2px;
 }
 
+/* ── 利用者リスト ── */
+
+/* .userList: 利用者を縦に並べたリスト */
 .userList {
-  list-style: none;
+  list-style: none;      /* デフォルトの点（・）を消す */
   padding: 0;
   margin: 0;
   display: flex;
@@ -134,29 +162,83 @@
   gap: 8px;
 }
 
+/* .userItem: 利用者1件の行（名前と介護度を横並びにする） */
 .userItem {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* 名前を左、介護度バッジを右に配置する */
   padding: 6px 0;
-  border-bottom: 1px solid #F1F5F9;
+  border-bottom: 1px solid #F1F5F9; /* 項目間の薄い区切り線 */
   font-size: 13px;
 }
 
+/* 最後の項目の下罫線を消す */
 .userItem:last-child {
   border-bottom: none;
 }
 
+/* .userName: 利用者の氏名テキスト */
 .userName {
   color: #1E293B;
   font-weight: 500;
 }
 
+/* .careLevel: 介護度を示すバッジ（例: 要介護3） */
 .careLevel {
   font-size: 11px;
-  background: #EFF6FF;
+  background: #EFF6FF;   /* 薄い青背景 */
   color: #2563EB;
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: 10px;   /* ピル型の丸みをつける */
   font-weight: 500;
+}
+
+/* ── アラートセクション ── */
+
+/* .alertSection: 期限切れ・更新期限が近いケアプランなどの警告を表示するカード */
+.alertSection {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* .alertTitle: アラートセクションのタイトル */
+.alertTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0 0 4px;
+}
+
+/* .alertItem: 個別のアラートメッセージ行（基本スタイル） */
+.alertItem {
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* .alertError: 緊急度が高いアラート（赤）。期限超過など */
+.alertError {
+  background: #FEF2F2;
+  color: #DC2626;
+  border-left: 3px solid #DC2626; /* 左の赤いアクセントラインでエラーを強調する */
+}
+
+/* .alertWarning: 注意アラート（黄）。期限が近い場合など */
+.alertWarning {
+  background: #FFFBEB;
+  color: #D97706;
+  border-left: 3px solid #D97706; /* 左の黄色いアクセントラインで警告を表す */
+}
+
+/* .chartsRow: 統計グラフを横2列に並べるレイアウト */
+.chartsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 等幅2列 */
+  gap: 24px;
 }

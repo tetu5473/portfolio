@@ -1,3 +1,7 @@
+/**
+ * UserForm.tsx — 利用者追加・編集フォームコンポーネント
+ * user が null のとき新規追加、値があるとき編集モードとして動作する
+ */
 import { useState } from 'react'
 import type { User } from '../../types'
 import { saveUser } from '../../utils/storage'
@@ -31,6 +35,14 @@ export default function UserForm({ user, onSaved, onCancel }: Props) {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault()
+      const form = e.currentTarget.closest('form')
+      if (form) form.requestSubmit()
+    }
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const saved: User = {
@@ -43,7 +55,7 @@ export default function UserForm({ user, onSaved, onCancel }: Props) {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
       <div className={styles.grid2}>
         <div className={styles.field}>
           <label className={styles.label}>氏名 <span className={styles.required}>*</span></label>

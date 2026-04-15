@@ -1,19 +1,25 @@
+/* Layout.module.css — アプリ全体のレイアウト構造スタイル */
+/* サイドバー（固定幅220px）＋メインエリア（残り幅）の横並びレイアウトを定義する */
+
+/* .container: サイドバーとメインエリアを横並びにするルートコンテナ */
 .container {
   display: flex;
-  min-height: 100vh;
-  background: #F8FAFC;
+  min-height: 100vh;     /* 画面全体の高さを使い切る（コンテンツが少ない場合も下端まで伸ばす） */
+  background: #F8FAFC;   /* サイドバーとメインコンテンツの外側の背景色 */
 }
 
+/* .main: ヘッダー＋コンテンツエリアを縦に積んだメイン領域 */
 .main {
-  flex: 1;
+  flex: 1;               /* サイドバー（220px）を除いた残り全幅を使う */
   display: flex;
-  flex-direction: column;
-  min-width: 0;
-  overflow: hidden;
+  flex-direction: column; /* ヘッダー（上）とコンテンツ（下）を縦に並べる */
+  min-width: 0;          /* flex 子要素がはみ出すのを防ぐ（flexbox の縮小バグ対策） */
+  overflow: hidden;      /* コンテンツエリアのスクロールを .content 内に閉じ込める */
 }
 
+/* .content: ページごとのコンテンツを表示する中央エリア */
 .content {
-  flex: 1;
-  padding: 28px;
-  overflow-y: auto;
+  flex: 1;               /* ヘッダー（60px）を除いた残り縦スペースを使う */
+  padding: 28px;         /* ページ内容の外側の余白 */
+  overflow-y: auto;      /* コンテンツが縦に溢れた場合にスクロールを有効にする */
 }
